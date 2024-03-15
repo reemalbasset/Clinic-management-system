@@ -1,0 +1,28 @@
+<html xmlns:th="http://wwww.thymleaf.org">
+    <head>
+        <title>Registration</title>
+        <link rel="stylesheet" href="../signup&login.css">
+        
+    </head>
+    <body>
+        <div class="signup">
+        <h2 class="sign">Sign up</h2>
+        </div>
+        <div class="sign">
+        <form th:action="@{/User/Registration}" th:object="${user}" method="POST">
+            <input class="element" type="text" th:field="*{name}" placeholder="Enter Name">
+            <input type="text" class="element" th:field="*{username}" placeholder="Enter UserName">
+            <input type="password" class="element" th:field="*{password}" placeholder="Enter Password">
+            <input type="password" class="element" th:field="*{password}" placeholder="Confirm Password">
+            <input type="date" class="element" th:field="*{dob}" placeholder="Enter Date of Birth">
+
+            <input class="submit" type="submit">
+        </form>
+        
+
+        
+            <a href="Login" class="forgot">Already have an account? Login here</a>
+        </div>
+    
+    </body>
+</html>
