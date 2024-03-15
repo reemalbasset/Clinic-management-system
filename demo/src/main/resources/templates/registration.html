@@ -5,6 +5,7 @@
         
     </head>
     <body>
+        <div th:include="navbar"></div>
         <div class="signup">
         <h2 class="sign">Sign up</h2>
         </div>
@@ -16,7 +17,7 @@
             <input type="password" class="element" placeholder="Confirm Password">
             <input type="date" class="element" th:field="*{dob}" placeholder="Enter Date of Birth">
 
-            <input class="submit" type="submit">
+            <input class="submit" type="submit"  value="signup">
         </form>
         
        

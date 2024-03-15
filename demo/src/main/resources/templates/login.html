@@ -3,6 +3,7 @@
         <title>Login</title>
         <link rel="stylesheet" href="../css/signup&login.css">
     </head><body>
+        <div th:include="navbar"></div>
     <div class="signup">
         <h2 class="sign">User Login</h2>
     </div>
@@ -13,7 +14,7 @@
             <input type="password" class="element" th:field="*{password}" placeholder="Enter Password">
             
 
-            <input class="submit" type="submit" placeholder="login">
+            <input class="submit" type="submit" value="Login">
         
         </form>
     </div>
