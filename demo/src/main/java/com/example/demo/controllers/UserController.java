@@ -60,60 +60,37 @@ public class UserController {
    }
    
    @PostMapping("Login")
-<<<<<<< HEAD
    public RedirectView loginProcess(@RequestParam("username") String username,
-   @RequestParam("password") String password,  HttpSession session) {
-
-      User dbUser=this.userRepositry.findByUsername(username);
-       Boolean isPasswordMatched=BCrypt.checkpw(password,dbUser.getPassword());
-       
-     if (!isPasswordMatched) {
-      session.setAttribute("username", dbUser.getUsername());
-      return new RedirectView("profile");
-     } else {
+                                   @RequestParam("password") String password,
+                                   HttpSession session) {
+       User dbUser = this.userRepositry.findByUsername(username);
+       if (dbUser != null) {
+           Boolean isPasswordMatched = org.mindrot.jbcrypt.BCrypt.checkpw(password, dbUser.getPassword());
+           if (isPasswordMatched) {
+               session.setAttribute("username", dbUser.getUsername());
+               if ("admin".equals(dbUser.getType())) {
+                   return new RedirectView("Dashboard");
+               } else {
+                   return new RedirectView("Profile");
+               }
+           }
+       }
        return new RedirectView("Login");
-     }
-
-       
-   }
-
-   @GetMapping("Profile")
-   public ModelAndView viewprofile(HttpSession session) {
-     ModelAndView mav = new ModelAndView("Profile.html");
-     mav.addObject("username",( String) session.getAttribute("username"));
-=======
-public RedirectView loginProcess(@RequestParam("username") String username,
-                                @RequestParam("password") String password,
-                                HttpSession session) {
-    User dbUser = this.userRepositry.findByUsername(username);
-    if (dbUser != null) {
-        Boolean isPasswordMatched = org.mindrot.jbcrypt.BCrypt.checkpw(password, dbUser.getPassword());
-        if (isPasswordMatched) {
-            session.setAttribute("username", dbUser.getUsername());
-            if ("admin".equals(dbUser.getType())) {
-                return new RedirectView("Dashboard");
-            } else {
-                return new RedirectView("Profile");
-            }
-        }
-    }
-    return new RedirectView("Login");
-}
-
-
-   @GetMapping("Profile")
-   public ModelAndView viewprofile(HttpSession session) {
-     ModelAndView mav = new ModelAndView("profile.html");
-     mav.addObject("username",(String)session.getAttribute("username"));
->>>>>>> 25cdf65722f88f4b44f78857751e47f4dbafc114
-     return mav;
    }
    
-    @GetMapping("Dashboard")
-    public ModelAndView viewdashboard(HttpSession session) {
-       ModelAndView mav = new ModelAndView("dashboard.html");
-       mav.addObject("username", (String) session.getAttribute("username"));
-      return mav;
+   
+      @GetMapping("Profile")
+      public ModelAndView viewprofile(HttpSession session) {
+        ModelAndView mav = new ModelAndView("profile.html");
+        mav.addObject("username",(String)session.getAttribute("username"));
+        return mav;
+      }
+      
+       @GetMapping("Dashboard")
+       public ModelAndView viewdashboard(HttpSession session) {
+          ModelAndView mav = new ModelAndView("dashboard.html");
+          mav.addObject("username", (String) session.getAttribute("username"));
+         return mav;
    }
    
-}
+   }
