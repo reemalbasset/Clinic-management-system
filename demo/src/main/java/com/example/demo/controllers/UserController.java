@@ -6,11 +6,12 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepositry;
 
-import ch.qos.logback.core.model.Model;
+
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +30,11 @@ public class UserController {
    @Autowired
    private UserRepositry userRepositry;
    
+   @GetMapping("/")
+   public ModelAndView index() {
+       ModelAndView mav = new ModelAndView("index.html");
+       return mav;
+   }
 
    @GetMapping("Registration")
    public ModelAndView addUser() {
@@ -55,21 +61,25 @@ public class UserController {
    
    @PostMapping("Login")
    public RedirectView loginProcess(@RequestParam("username") String username,
-   @RequestParam("password") String password,HttpSession session) {
+   @RequestParam("password") String password,  HttpSession session) {
 
       User dbUser=this.userRepositry.findByUsername(username);
-       Boolean isPasswordMatched=org.mindrot.jbcrypt.BCrypt.checkpw(password,dbUser.getPassword());
-       if(isPasswordMatched){
-        session.setAttribute("username", dbUser.getUsername());
-       return new RedirectView("Profile");
-       }else
+       Boolean isPasswordMatched=BCrypt.checkpw(password,dbUser.getPassword());
+       
+     if (!isPasswordMatched) {
+      session.setAttribute("username", dbUser.getUsername());
+      return new RedirectView("profile");
+     } else {
        return new RedirectView("Login");
+     }
+
+       
    }
 
    @GetMapping("Profile")
    public ModelAndView viewprofile(HttpSession session) {
      ModelAndView mav = new ModelAndView("Profile.html");
-     mav.addObject("username",(String)session.getAttribute("username"));
+     mav.addObject("username",( String) session.getAttribute("username"));
      return mav;
    }
    
