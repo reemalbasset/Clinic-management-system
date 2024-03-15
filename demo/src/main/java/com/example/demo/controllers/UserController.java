@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.demo.models.User;
@@ -33,6 +34,16 @@ public class UserController {
    @GetMapping("/")
    public ModelAndView index() {
        ModelAndView mav = new ModelAndView("index.html");
+       return mav;
+   }
+   @GetMapping("specialities")
+   public ModelAndView specialitiespage() {
+       ModelAndView mav = new ModelAndView("specialities.html");
+       return mav;
+   }
+   @GetMapping("clinicteam")
+   public ModelAndView clinicteampage() {
+       ModelAndView mav = new ModelAndView("clinicteam.html");
        return mav;
    }
 
@@ -82,7 +93,10 @@ public class UserController {
       @GetMapping("Profile")
       public ModelAndView viewprofile(HttpSession session) {
         ModelAndView mav = new ModelAndView("profile.html");
+        ModelAndView mav1 = new ModelAndView("profile.html");
         mav.addObject("username",(String)session.getAttribute("username"));
+        mav.addObject("name",(String)session.getAttribute("name"));
+        mav.addObject("dob",(String)session.getAttribute("dob"));
         return mav;
       }
       
@@ -93,4 +107,48 @@ public class UserController {
          return mav;
    }
    
+   @GetMapping("EditProfile")
+      public ModelAndView editProfile(HttpSession session) {
+         ModelAndView mav = new ModelAndView("editProfile.html");
+         String username = (String) session.getAttribute("username");
+         User user = userRepositry.findByUsername(username);
+         mav.addObject("user", user);
+         return mav;
+      }
+
+      @PostMapping("EditProfile")
+      public RedirectView updateProfile(@ModelAttribute User updatedUser, RedirectAttributes redirectAttributes) {
+         User existingUser = userRepositry.findByUsername(updatedUser.getUsername());
+         if (existingUser != null) {
+            try {
+                  // Update user details
+                  existingUser.setName(updatedUser.getName());
+                  existingUser.setDob(updatedUser.getDob());
+                  
+                  // Hash the updated password if provided
+                  String updatedPassword = updatedUser.getPassword();
+                  if (updatedPassword != null && !updatedPassword.isEmpty()) {
+                     String encoddedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(updatedPassword, org.mindrot.jbcrypt.BCrypt.gensalt(12));
+                     existingUser.setPassword(encoddedPassword);
+                  }
+                  
+                  // Save the updated user
+                  userRepositry.save(existingUser);
+                  // Redirect to profile page after successful update
+                  return new RedirectView("/User/Profile", true);
+            } catch (Exception e) {
+                  // Log the exception
+                  e.printStackTrace();
+                  // Add error message to redirect attributes
+                  redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while updating your profile.");
+                  return new RedirectView("/User/EditProfile", true);
+            }
+         } else {
+            // User not found in the database
+            redirectAttributes.addFlashAttribute("errorMessage", "User not found. Please try again.");
+            return new RedirectView("/User/EditProfile", true);
+         }
+      }
+
+
    }

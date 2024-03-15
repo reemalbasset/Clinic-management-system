@@ -1,23 +1,25 @@
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Profile</title>
-    <link rel="stylesheet" href="../css/profile.css">
-</head>
-<body>
-<div class="MAIN">
-    <div class="signup">
-        <h1 class="sign">Welcome</h1>
-    </div>
-    <div class="all-1">
-        <div class="all">
-            <p>Welcome, <span th:text="${session.username}"></span>!</p>
-            <p>Name: <span th:text="${session.name}"></span></p>
-            <p>Date of birth: <span th:text="${session.dob}"></span></p>
-        </div>
+<html xmlns:th="http://wwww.thymleaf.org">
+    <head>
+        <title>Profile</title>
+        <link rel="stylesheet" href="../css/profile.css">
+    </head>
+    <body>
+        <div class="MAIN">
+          <div th:include="navbar"></div>
+            <div class="signup">
+              <h1 class="sign">Welcome</h1>
+          </div>
+          <div class="all-1">
+    <div class="all">
+        <p>Welcome,<span th:text="${session.username}"></span>!</p>
+        <p>Name:<span th:text="${session.name}"></span></p>
+        <p>Date of birth:<span th:text="${session.dob}"></span></p>
 
-        <div class="right-nav">
-            <nav class="profile-nav">
-                <ul>
+    </div>    
+            
+          <div class="right-nav">
+                 <nav class="profile-nav">
+                  <ul>
                     <li>
                         <a href="index.html">
                             <i class="fa-solid fa-house"></i>
@@ -43,10 +45,10 @@
                         </a>
                     </li>
                     <li>
-                        <a href="editProfile.html">
-                            <i class="fa-regular fa-pen-to-square"></i>
-                            Edit Profile
-                        </a>
+                      <a href="/User/EditProfile">
+                        <i class="fa-regular fa-pen-to-square" ></i>
+                        Edit Profile
+                      </a>
                     </li>
                     <li>
                         <a href="logOut.html">
