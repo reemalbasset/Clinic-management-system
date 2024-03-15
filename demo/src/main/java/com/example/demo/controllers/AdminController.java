@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,49 +20,62 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/Admin")
 public class AdminController {
     @Autowired
-     private UserRepositry AdminRepositry;
+    private UserRepositry AdminRepositry;
+    private UserRepositry UserRepositry;
+
+    @GetMapping("Index")
+   public ModelAndView index() {
+       ModelAndView mav = new ModelAndView("index.html");
+       return mav;
+   }
+
     @GetMapping("Login")
-   public ModelAndView login() {
-      ModelAndView mav=new ModelAndView("login.html");
-      User newUser=new User();
-      mav.addObject("user", newUser);
-      return mav;
-   }
-   
-   @PostMapping("Login")
-   public RedirectView loginProcess(@RequestParam("username") String username,
-                                   @RequestParam("password") String password,
-                                   HttpSession session) {
-       User dbUser = this.AdminRepositry.findByUsername(username);
-       if (dbUser != null) {
-           Boolean isPasswordMatched = org.mindrot.jbcrypt.BCrypt.checkpw(password, dbUser.getPassword());
-           if (isPasswordMatched) {
-               session.setAttribute("username", dbUser.getUsername());
-               if ("admin".equals(dbUser.getType())) {
-                   return new RedirectView("Dashboard");
-               } else {
-                   return new RedirectView("Profile");
-               }
-           }
-       }
-       return new RedirectView("Login");
-   }
-   
-   
-      @GetMapping("Profile")
-      public ModelAndView viewprofile(HttpSession session) {
-        ModelAndView mav = new ModelAndView("profile.html");
-        mav.addObject("username",(String)session.getAttribute("username"));
+    public ModelAndView login() {
+        ModelAndView mav = new ModelAndView("login.html");
+        User newUser = new User();
+        mav.addObject("user", newUser);
         return mav;
-      }
-      
-       @GetMapping("Dashboard")
-       public ModelAndView viewdashboard(HttpSession session) {
-          ModelAndView mav = new ModelAndView("dashboard.html");
-          mav.addObject("username", (String) session.getAttribute("username"));
-         return mav;
-   }
-   
-   }
+    }
 
+    @PostMapping("Login")
+    public RedirectView loginProcess(@RequestParam("username") String username,
+            @RequestParam("password") String password,
+            HttpSession session) {
+        User dbUser = this.AdminRepositry.findByUsername(username);
+        if (dbUser != null) {
+            Boolean isPasswordMatched = org.mindrot.jbcrypt.BCrypt.checkpw(password, dbUser.getPassword());
+            if (isPasswordMatched) {
+                session.setAttribute("username", dbUser.getUsername());
+                if ("admin".equals(dbUser.getType())) {
+                    return new RedirectView("Dashboard");
+                } else {
+                    return new RedirectView("Profile");
+                }
+            }
+        }
+        return new RedirectView("Login");
+    }
 
+    @GetMapping("Profile")
+    public ModelAndView viewprofile(HttpSession session) {
+        ModelAndView mav = new ModelAndView("profile.html");
+        mav.addObject("username", (String) session.getAttribute("username"));
+        return mav;
+    }
+
+    @GetMapping("Dashboard")
+    public ModelAndView viewdashboard(HttpSession session) {
+        ModelAndView mav = new ModelAndView("dashboard.html");
+        mav.addObject("username", (String) session.getAttribute("username"));
+        return mav;
+    }
+
+    @GetMapping("Patient")
+    public ModelAndView getUser(){
+        ModelAndView mav = new ModelAndView("patients.html");
+        List<User> users=this.UserRepositry.findAll();
+        mav.addObject( "user", users);
+        return mav;
+    }
+
+}

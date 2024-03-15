@@ -68,11 +68,11 @@ public class UserController {
            Boolean isPasswordMatched = org.mindrot.jbcrypt.BCrypt.checkpw(password, dbUser.getPassword());
            if (isPasswordMatched) {
                session.setAttribute("username", dbUser.getUsername());
-               if ("admin".equals(dbUser.getType())) {
-                   return new RedirectView("Dashboard");
-               } else {
+               // if ("admin".equals(dbUser.getType())) {
+                  //  return new RedirectView("Dashboard");
+               // } else {
                    return new RedirectView("Profile");
-               }
+               // }
            }
        }
        return new RedirectView("Login");
