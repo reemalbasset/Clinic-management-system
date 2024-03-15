@@ -1,5 +1,9 @@
 package com.example.demo.repositories;
 
-public class UserRepositry {
-    
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.demo.models.User;
+
+public interface  UserRepositry extends JpaRepository<User,Integer> {
+    User findByUsername(String username);
 }
