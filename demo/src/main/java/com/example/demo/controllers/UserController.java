@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -54,28 +55,37 @@ public class UserController {
    }
    
    @PostMapping("Login")
-   public RedirectView loginProcess(@RequestParam("username") String username,
-   @RequestParam("password") String password,HttpSession session) {
+public RedirectView loginProcess(@RequestParam("username") String username,
+                                @RequestParam("password") String password,
+                                HttpSession session) {
+    User dbUser = this.userRepositry.findByUsername(username);
+    if (dbUser != null) {
+        Boolean isPasswordMatched = org.mindrot.jbcrypt.BCrypt.checkpw(password, dbUser.getPassword());
+        if (isPasswordMatched) {
+            session.setAttribute("username", dbUser.getUsername());
+            if ("admin".equals(dbUser.getType())) {
+                return new RedirectView("Dashboard");
+            } else {
+                return new RedirectView("Profile");
+            }
+        }
+    }
+    return new RedirectView("Login");
+}
 
-      User dbUser=this.userRepositry.findByUsername(username);
-       Boolean isPasswordMatched=org.mindrot.jbcrypt.BCrypt.checkpw(password,dbUser.getPassword());
-       if(isPasswordMatched){
-        session.setAttribute("username", dbUser.getUsername());
-       return new RedirectView("Profile");
-       }else
-       return new RedirectView("Login");
-   }
 
    @GetMapping("Profile")
    public ModelAndView viewprofile(HttpSession session) {
-     ModelAndView mav = new ModelAndView("Profile.html");
+     ModelAndView mav = new ModelAndView("profile.html");
      mav.addObject("username",(String)session.getAttribute("username"));
      return mav;
    }
    
-   
-   
-   
-   
+    @GetMapping("Dashboard")
+    public ModelAndView viewdashboard(HttpSession session) {
+       ModelAndView mav = new ModelAndView("dashboard.html");
+       mav.addObject("username", (String) session.getAttribute("username"));
+      return mav;
+   }
    
 }
