@@ -105,7 +105,6 @@ public class UserController {
          mav.addObject("user", user);
          return mav;
       }
-
       @PostMapping("EditProfile")
       public RedirectView updateProfile(@ModelAttribute User updatedUser, HttpSession session, RedirectAttributes redirectAttributes) {
           // Retrieve the existing user from the session
@@ -118,7 +117,12 @@ public class UserController {
                   existingUser.setName(updatedUser.getName());
                   existingUser.setDob(updatedUser.getDob());
                   existingUser.setUsername(updatedUser.getUsername());
-                  existingUser.setPassword(BCrypt.hashpw(updatedUser.getPassword(), BCrypt.gensalt(12))); // Hash the password
+                  
+                  // Check if the password field is provided in the form
+                  if (!updatedUser.getPassword().isEmpty()) {
+                      // Hash and update the password only if provided
+                      existingUser.setPassword(BCrypt.hashpw(updatedUser.getPassword(), BCrypt.gensalt(12)));
+                  }
                   
                   // Save the updated user
                   userRepositry.save(existingUser);
