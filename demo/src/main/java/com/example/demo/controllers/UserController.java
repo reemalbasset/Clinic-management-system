@@ -107,38 +107,39 @@ public class UserController {
       }
 
       @PostMapping("EditProfile")
-      public RedirectView updateProfile(@ModelAttribute User updatedUser, RedirectAttributes redirectAttributes) {
-         User existingUser = userRepositry.findByUsername(updatedUser.getUsername());
-         if (existingUser != null) {
-            try {
-                  // Update user details
+      public RedirectView updateProfile(@ModelAttribute User updatedUser, HttpSession session, RedirectAttributes redirectAttributes) {
+          // Retrieve the existing user from the session
+          String username = (String) session.getAttribute("username");
+          User existingUser = userRepositry.findByUsername(username);
+          
+          // Update the existing user with the values from the updated user
+          if (existingUser != null) {
+              try {
                   existingUser.setName(updatedUser.getName());
                   existingUser.setDob(updatedUser.getDob());
-                  
-                  // Hash the updated password if provided
-                  String updatedPassword = updatedUser.getPassword();
-                  if (updatedPassword != null && !updatedPassword.isEmpty()) {
-                     String encoddedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(updatedPassword, org.mindrot.jbcrypt.BCrypt.gensalt(12));
-                     existingUser.setPassword(encoddedPassword);
-                  }
+                  existingUser.setUsername(updatedUser.getUsername());
+                  existingUser.setPassword(BCrypt.hashpw(updatedUser.getPassword(), BCrypt.gensalt(12))); // Hash the password
                   
                   // Save the updated user
                   userRepositry.save(existingUser);
+                  
                   // Redirect to profile page after successful update
                   return new RedirectView("/User/Profile", true);
-            } catch (Exception e) {
+              } catch (Exception e) {
                   // Log the exception
                   e.printStackTrace();
                   // Add error message to redirect attributes
                   redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while updating your profile.");
-                  return new RedirectView("/User/EditProfile", true);
-            }
-         } else {
-            // User not found in the database
-            redirectAttributes.addFlashAttribute("errorMessage", "User not found. Please try again.");
-            return new RedirectView("/User/EditProfile", true);
-         }
+              }
+          } else {
+              // User not found in the session
+              redirectAttributes.addFlashAttribute("errorMessage", "User not found. Please try again.");
+          }
+          
+          // Redirect back to the edit profile page in case of errors
+          return new RedirectView("/User/EditProfile", true);
       }
+      
       @GetMapping("/logout")
     public RedirectView logout(HttpSession session) {
         // Invalidate session
