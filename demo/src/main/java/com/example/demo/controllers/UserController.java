@@ -56,6 +56,26 @@ public class UserController {
        ModelAndView mav = new ModelAndView("doctorslist.html");
        return mav;
    }
+   @GetMapping("doctorsdetails")
+   public ModelAndView doctorsdetailspage() {
+       ModelAndView mav = new ModelAndView("doctorsdetails.html");
+       return mav;
+   }
+   @GetMapping("booking")
+   public ModelAndView bookingpage() {
+       ModelAndView mav = new ModelAndView("booking.html");
+       return mav;
+   }
+   @GetMapping("editprofile")
+   public ModelAndView editprofilepage() {
+       ModelAndView mav = new ModelAndView("editprofile.html");
+       return mav;
+   }
+   @GetMapping("logout")
+   public ModelAndView logoutpage() {
+       ModelAndView mav = new ModelAndView("logout.html");
+       return mav;
+   }
 
    @GetMapping("Registration")
    public ModelAndView addUser() {

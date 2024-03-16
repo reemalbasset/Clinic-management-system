@@ -12,8 +12,6 @@
           <div class="all-1">
     <div class="all">
         <p>Welcome,<span th:text="${session.username}"></span>!</p>
-        <p>Name:<span th:text="${session.name}"></span></p>
-        <p>Date of birth:<span th:text="${session.dob}"></span></p>
 
     </div>    
             
@@ -21,13 +19,13 @@
                  <nav class="profile-nav">
                   <ul>
                     <li>
-                        <a href="index.html">
+                        <a href="../">
                             <i class="fa-solid fa-house"></i>
                             Home
                         </a>
                     </li>
                     <li>
-                        <a href="booking.html">
+                        <a href="booking">
                             <i class="fa-regular fa-calendar-check"></i>
                             Book appointment
                         </a>
@@ -45,13 +43,13 @@
                         </a>
                     </li>
                     <li>
-                      <a href="/User/EditProfile">
+                      <a href="editprofile">
                         <i class="fa-regular fa-pen-to-square" ></i>
                         Edit Profile
                       </a>
                     </li>
                     <li>
-                        <a href="logOut.html">
+                        <a href="logOut">
                             <i class="fa-solid fa-arrow-right-from-bracket"></i>
                             Logout
                         </a>

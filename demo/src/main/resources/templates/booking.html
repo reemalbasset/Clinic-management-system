@@ -1,0 +1,45 @@
+<html xmlns:th="http://wwww.thymleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnectionect" href="https://fonts.googleapis.com">
+        <link rel="preconnectionect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="../css/booking.css">
+    
+        <title>Booking</title>
+    </head>
+    <body>
+        <div th:include="navbar"></div>
+        <div class=book1>
+            <button class=btext1><a class=btext111 href="../">Home</a>/Booking</button>
+        <p class=btext2>Book an Appointment</p>
+        </div>
+        <br><br>
+        <div class=bookingform>
+            <form action="..\view\process.php" method="post">
+         
+                 <label for="doctor_id">Doctor:</label>
+                <select name="doctor_id" required class=opt1> 
+                    
+                </select><br><br>
+                <label for="patient_id">Patient:</label>
+                <input type="text" id="patient_id" name="appointment_date" required>
+               
+                </select><br><br>
+                <span>
+                <!-- <label for="appointment_date">Appointment Date:</label> -->
+                <input type="date" class=opt3 name="appointment_date" required>
+        
+                <!-- <label for="appointment_time">Appointment Time:</label> -->
+                <input type="time" class=opt4 name="appointment_time" required>
+                <br><br>
+                </span>
+                <span>
+                <input type="submit" class=submitbtn  value="Book Appointment">
+                <button class=cancelbtn><a class=cancelbtn1 href="../">Cancel</a></button>
+                </span>
+            </form>
+                </div>
+    </body>
+</html>
