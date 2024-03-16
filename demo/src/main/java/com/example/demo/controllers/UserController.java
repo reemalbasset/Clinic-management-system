@@ -62,22 +62,38 @@ public class UserController {
    
    @PostMapping("Login")
    public RedirectView loginProcess(@RequestParam("username") String username,
-                                   @RequestParam("password") String password,
-                                   HttpSession session) {
-       User dbUser = this.userRepositry.findByUsername(username);
-       if (dbUser != null) {
-           Boolean isPasswordMatched = org.mindrot.jbcrypt.BCrypt.checkpw(password, dbUser.getPassword());
-           if (isPasswordMatched) {
-               session.setAttribute("username", dbUser.getUsername());
-               // if ("admin".equals(dbUser.getType())) {
-                  //  return new RedirectView("Dashboard");
-               // } else {
-                   return new RedirectView("Profile");
-               // }
-           }
+                                    @RequestParam("password") String password,
+                                    HttpSession session,
+                                    RedirectAttributes redirectAttributes) {
+       // Check if username and password are not empty
+       if (username.isEmpty() || password.isEmpty()) {
+           // Add error message to redirect attributes
+           redirectAttributes.addFlashAttribute("errorMessage", "Username and password cannot be empty.");
+           // Redirect back to the login page
+           return new RedirectView("Login");
        }
-       return new RedirectView("Login");
+   
+       // Check if the entered username exists in the database
+       User dbUser = this.userRepositry.findByUsername(username);
+       if (dbUser == null) {
+           // Add error message to redirect attributes if username does not exist
+           redirectAttributes.addFlashAttribute("errorMessage", "Invalid username.");
+           return new RedirectView("Login");
+       }
+   
+       // Check if the entered password matches the hashed password in the database
+       Boolean isPasswordMatched = org.mindrot.jbcrypt.BCrypt.checkpw(password, dbUser.getPassword());
+       if (isPasswordMatched) {
+           // Authentication successful: set the username attribute in the session and redirect to the profile page
+           session.setAttribute("username", dbUser.getUsername());
+           return new RedirectView("Profile");
+       } else {
+           // Add error message to redirect attributes if password is incorrect
+           redirectAttributes.addFlashAttribute("errorMessage", "Invalid password.");
+           return new RedirectView("Login");
+       }
    }
+   
    
    
       @GetMapping("Profile")
