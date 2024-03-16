@@ -46,6 +46,16 @@ public class UserController {
        ModelAndView mav = new ModelAndView("clinicteam.html");
        return mav;
    }
+   @GetMapping("aboutus")
+   public ModelAndView aboutuspage() {
+       ModelAndView mav = new ModelAndView("aboutus.html");
+       return mav;
+   }
+   @GetMapping("doctorslist")
+   public ModelAndView doctorslistpage() {
+       ModelAndView mav = new ModelAndView("doctorslist.html");
+       return mav;
+   }
 
    @GetMapping("Registration")
    public ModelAndView addUser() {
