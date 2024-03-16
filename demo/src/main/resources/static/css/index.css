@@ -349,3 +349,47 @@
   .onee{
     transform: translate(1109px,-1797px);
   }
+  .contactindexbox{
+    background-color:#1f1fb8;
+    width: 1200px;
+    height: 230px;
+    border: 35px solid #1f1fb8;
+    /* padding: 50px;
+    margin: 20px; */
+    transform: translate(50px,-1560px);
+    
+    
+  }
+  .contactindexp{
+  color: white;
+  margin-left:20%;
+  margin-top: 25px;
+  font-size: 40px;
+  letter-spacing:1px;
+  }
+   .contactindexbtn1{
+    background-color: white;
+    color:#1f1fb8 ;
+    border: none;
+    width: 255px;
+    height: 20%;
+    border-radius: 6px;
+    font-size: 13px;
+    }
+    .contactindexbtn2{
+      background-color: #1f1fb8;
+      color:white ;
+      height: 20%;
+      border:solid 1px;
+      width: 23%;
+      border-radius: 6px;
+      }
+      .btncontainer,.contactindexbtn2,.contactindexbtn1{
+        display: inline-block;
+       
+      }
+      .btncontainer{
+        margin-left: 35%;
+        margin-top: 40px;
+        display: inline-block;
+      }
