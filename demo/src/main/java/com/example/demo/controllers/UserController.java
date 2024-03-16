@@ -37,12 +37,6 @@ public class UserController {
        return mav;
    }
    
-   @GetMapping("logout")
-   public ModelAndView logoutpage() {
-       ModelAndView mav = new ModelAndView("logout.html");
-       return mav;
-   }
-
    @GetMapping("Registration")
    public ModelAndView addUser() {
     ModelAndView mav=new ModelAndView("registration.html");
@@ -145,6 +139,13 @@ public class UserController {
             return new RedirectView("/User/EditProfile", true);
          }
       }
+      @GetMapping("/logout")
+    public RedirectView logout(HttpSession session) {
+        // Invalidate session
+        session.invalidate();
+        // Redirect to login page after logout
+        return new RedirectView("/User/Login", true);
+    }
 
 
    }
