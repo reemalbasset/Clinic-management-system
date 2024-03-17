@@ -199,10 +199,7 @@ return mav;
 }
 @PostMapping("/deleteDoctor")
 public String deletdr(@RequestParam("doctorId") Long doctorId) {
-    // Implement logic to delete the food item with the given id
-    // Example:
     doctorRepository.deleteById((long) doctorId);
-    // Redirect to the page displaying the list of foods after deletion
     return "redirect:/view_doctors";
 }
 }
