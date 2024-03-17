@@ -202,4 +202,8 @@ public String deletdr(@RequestParam("doctorId") Long doctorId) {
     doctorRepository.deleteById((long) doctorId);
     return "redirect:/view_doctors";
 }
+
+
+
+
 }
