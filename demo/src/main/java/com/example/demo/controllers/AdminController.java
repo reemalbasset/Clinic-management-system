@@ -21,9 +21,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.demo.models.Doctor;
 import com.example.demo.models.Nurse;
+import com.example.demo.models.Patient;
 import com.example.demo.models.User;
 import com.example.demo.repositories.DoctorRepository;
 import com.example.demo.repositories.NurseRepository;
+import com.example.demo.repositories.PatientRepository;
 import com.example.demo.repositories.UserRepositry;
 
 
@@ -234,4 +236,37 @@ public ModelAndView saveNurse(@ModelAttribute Nurse nurse,
     mav.setViewName("redirect:/Admin/addNurse");
     return mav;
 }
+
+
+@Autowired
+private PatientRepository patientRepositry ;
+
+@GetMapping("addPatient")
+public ModelAndView showpatientForm() {
+    ModelAndView mav = new ModelAndView("add_patient");
+    mav.addObject("patient", new Patient());
+    return mav;
+
+}
+@PostMapping("addPatient")
+public ModelAndView savePatient(@ModelAttribute Patient patient,
+                               RedirectAttributes redirectAttributes) {
+    ModelAndView mav = new ModelAndView();
+    try {
+        // Save doctor details
+        patientRepositry.save(patient);
+        redirectAttributes.addFlashAttribute("successMessage", "patient added successfully.");
+    } catch (DataIntegrityViolationException e) {
+        e.printStackTrace();
+        redirectAttributes.addFlashAttribute("errorMessage", "Failed to save patient details due to a constraint violation.");
+    } catch (Exception e) {
+        e.printStackTrace();
+        redirectAttributes.addFlashAttribute("errorMessage", "Failed to save patient details.");
+    }
+    // Redirect to the same page
+    mav.setViewName("redirect:/Admin/addPatient");
+    return mav;
+}
+
+
 }
