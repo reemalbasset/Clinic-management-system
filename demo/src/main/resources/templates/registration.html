@@ -61,14 +61,14 @@
     <div class="sign">
         <form th:action="@{/User/Registration}" th:object="${user}" method="POST">
             <input class="element" type="text" th:field="*{name}" placeholder="Enter Name">
-            <input type="text" class="element" id="username" placeholder="Enter UserName">
+            <input type="text" class="element" id="username" th:field="*{username}" placeholder="Enter UserName">
             <span id="usernameError" style="color: red;"></span>
-            <input type="password" class="element" id="password" placeholder="Enter Password">
+            <input type="password" class="element" id="password" th:field="*{password}" placeholder="Enter Password">
             <span id="passwordError" style="color: red;"></span>
             <input type="password" class="element" id="confirmPassword" placeholder="Confirm Password">
             <span id="confirmPasswordError" style="color: red;"></span>
-            <input type="date" class="element" id="dob" placeholder="Enter Date of Birth">
-            <span id="dobError" style="color: red;"></span>
+            <input type="date" class="element" id="dob" th:field="*{dob}" placeholder="Enter Date of Birth">
+            <span id="dobError" style="color: red;"></span>            
             <input class="submit" type="submit" value="signup">
         </form>
         <a href="Login" class="forgot">Already have an account? Login here</a>
