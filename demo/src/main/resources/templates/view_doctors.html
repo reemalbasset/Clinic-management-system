@@ -1,90 +1,135 @@
-<!-- view_doctors.html -->
+<?php
+include "../db/dbh.inc.php";
+?>
+
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Doctors</title>
-    <style>
-        /* style.css */
-
-/* Body styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
-
-/* Heading styles */
-h2 {
-    text-align: center;
-    margin-top: 20px;
-}
-
-/* Table styles */
-table {
-    width: 80%;
-    margin: 20px auto;
-    border-collapse: collapse;
-}
-
-/* Table header styles */
-th {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px;
-    text-align: left;
-}
-
-/* Table cell styles */
-td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-/* Table row hover effect */
-tbody tr:hover {
-    background-color: #f2f2f2;
-}
-
-/* Link styles */
-a {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    color: #007bff;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-    </style>
+    <title>All Doctors</title>
 </head>
-<body>
-    <div th:include="sidebar"></div>
 
-    <h1>Doctors</h1>
-    <table>
+<body>
+    <h2>All Doctors</h2>
+    <a th:href="@{/Admin/Dashboard}" class="back-button">Back</a>
+    <table class="table table-hover table-bordered table-striped">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Specialization</th>
+                <th>Email</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="doctor : ${doctors}">
                 <td th:text="${doctor.id}"></td>
                 <td th:text="${doctor.name}"></td>
-                <td th:text="${doctor.specialization}"></td>
+                <td th:text="${doctor.email}"></td>
+                <td><a th:href="@{/admin/updateDoctor/{id}(id=${doctor.id})}" class="edit-button">Edit</a></td>
+                <td><a th:href="@{/admin/deleteDoctor/{id}(id=${doctor.id})}" class="delete-button">Delete</a></td>
             </tr>
         </tbody>
     </table>
-    <br><br>
-    <a href="Dashboard">dashboard</a>
-
 </body>
+
 </html>
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    table {
+        width: 80%;
+        margin: 0 auto;
+        border-collapse: collapse;
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid #ddd;
+    }
+
+    th,
+    td {
+        padding: 15px;
+        text-align: left;
+    }
+
+    thead {
+        background-color: #007BFF;
+        color: white;
+    }
+
+    /* Style the "Back" button */
+    .back-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .back-button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Style the "Edit" button */
+    .edit-button {
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: #5cb85c;
+        /* Green color */
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 10px;
+        transition: background-color 0.3s;
+    }
+
+    .edit-button:hover {
+        background-color: #449d44;
+        /* Darker green color on hover */
+    }
+
+    /* Style the "Delete" button */
+    .delete-button {
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: #d9534f;
+        /* Red color */
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .delete-button:hover {
+        background-color: #c9302c;
+        /* Darker red color on hover */
+    }
+</style>
