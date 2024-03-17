@@ -20,8 +20,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.demo.models.Doctor;
+import com.example.demo.models.Nurse;
 import com.example.demo.models.User;
 import com.example.demo.repositories.DoctorRepository;
+import com.example.demo.repositories.NurseRepository;
 import com.example.demo.repositories.UserRepositry;
 
 
@@ -203,7 +205,33 @@ public String deletdr(@RequestParam("doctorId") Long doctorId) {
     return "redirect:/view_doctors";
 }
 
+@Autowired
+private NurseRepository nurserepository;
 
+@GetMapping("addNurse")
+public ModelAndView showNurseForm() {
+    ModelAndView mav = new ModelAndView("add_nurse");
+    mav.addObject("nurse", new Nurse());
+    return mav;
+}
 
-
+@PostMapping("addNurse")
+public ModelAndView saveNurse(@ModelAttribute Nurse nurse,
+                               RedirectAttributes redirectAttributes) {
+    ModelAndView mav = new ModelAndView();
+    try {
+        // Save doctor details
+        nurserepository.save(nurse);
+        redirectAttributes.addFlashAttribute("successMessage", "Doctor added successfully.");
+    } catch (DataIntegrityViolationException e) {
+        e.printStackTrace();
+        redirectAttributes.addFlashAttribute("errorMessage", "Failed to save doctor details due to a constraint violation.");
+    } catch (Exception e) {
+        e.printStackTrace();
+        redirectAttributes.addFlashAttribute("errorMessage", "Failed to save doctor details.");
+    }
+    // Redirect to the same page
+    mav.setViewName("redirect:/Admin/addNurse");
+    return mav;
+}
 }
