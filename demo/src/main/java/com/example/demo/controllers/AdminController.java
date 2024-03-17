@@ -268,6 +268,11 @@ public ModelAndView savePatient(@ModelAttribute Patient patient,
     mav.setViewName("redirect:/Admin/addPatient");
     return mav;
 }
-
-
+@GetMapping("viewPatient")
+public ModelAndView getpatient() {
+ModelAndView mav = new ModelAndView("viewPatient");
+List<Patient> patients = this.patientRepositry.findAll();
+mav.addObject("patients", patients);
+return mav;
+}
 }
