@@ -29,8 +29,8 @@
                 <td th:text="${doctor.id}"></td>
                 <td th:text="${doctor.name}"></td>
                 <td th:text="${doctor.email}"></td>
-                <td><a th:href="@{/admin/updateDoctor/{id}(id=${doctor.id})}" class="edit-button">Edit</a></td>
-                <td><a th:href="@{/admin/deleteDoctor/{id}(id=${doctor.id})}" class="delete-button">Delete</a></td>
+                <td><a th:href="@{/Admin/updateDoctor/{id}(id=${doctor.id})}" class="edit-button">Edit</a></td>
+                <td><a th:href="@{/Admin/view_doctors}" class="delete-button">Delete</a></td>
             </tr>
         </tbody>
     </table>
