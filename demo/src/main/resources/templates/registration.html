@@ -1,30 +1,77 @@
-<html xmlns:th="http://wwww.thymleaf.org">
-    <head>
-        <title>Registration</title>
-        <link rel="stylesheet" href="../css/signup&login.css">
-        
-    </head>
-    <body>
-        <div th:include="navbar"></div>
-        <div class="signup">
+<html>
+<head>
+    <title>Registration</title>
+    <link rel="stylesheet" href="../css/signup&login.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Username validation
+            $('#username').on('input', function() {
+                var username = $(this).val();
+                var regex = /^[a-zA-Z0-9_]+$/;
+                if (!regex.test(username)) {
+                    $('#usernameError').text('Username can only contain letters, numbers, and underscores.');
+                } else {
+                    $('#usernameError').text('');
+                }
+            });
+
+            // Password validation
+            $('#password').on('input', function() {
+                var password = $(this).val();
+                var regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                if (!regex.test(password)) {
+                    $('#passwordError').text('Password must be at least 8 characters long and contain at least one letter and one number.');
+                } else {
+                    $('#passwordError').text('');
+                }
+            });
+
+            // Confirm Password validation
+            $('#confirmPassword').on('input', function() {
+                var confirmPassword = $(this).val();
+                var password = $('#password').val();
+                if (confirmPassword !== password) {
+                    $('#confirmPasswordError').text('Passwords do not match.');
+                } else {
+                    $('#confirmPasswordError').text('');
+                }
+            });
+
+            // Date of Birth validation
+            $('#dob').on('input', function() {
+                var dob = $(this).val();
+                var dobDate = new Date(dob);
+                var currentDate = new Date();
+                var minAgeDate = new Date(currentDate.getFullYear() - 16, currentDate.getMonth(), currentDate.getDate());
+                if (dobDate > minAgeDate) {
+                    $('#dobError').text('You must be at least 16 years old.');
+                } else {
+                    $('#dobError').text('');
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div th:include="navbar"></div>
+    <div class="signup">
         <h2 class="sign">Sign up</h2>
-        </div>
-        <div class="sign">
+    </div>
+    <div class="sign">
         <form th:action="@{/User/Registration}" th:object="${user}" method="POST">
             <input class="element" type="text" th:field="*{name}" placeholder="Enter Name">
-            <input type="text" class="element" th:field="*{username}" placeholder="Enter UserName">
-            <input type="password" class="element" th:field="*{password}" placeholder="Enter Password">
-            <input type="password" class="element" placeholder="Confirm Password">
-            <input type="date" class="element" th:field="*{dob}" placeholder="Enter Date of Birth">
-
-            <input class="submit" type="submit"  value="signup">
+            <input type="text" class="element" id="username" th:field="*{username}" placeholder="Enter UserName">
+            <span id="usernameError" style="color: red;"></span>
+            <input type="password" class="element" id="password" th:field="*{password}" placeholder="Enter Password">
+            <span id="passwordError" style="color: red;"></span>
+            <input type="password" class="element" id="confirmPassword" placeholder="Confirm Password">
+            <span id="confirmPasswordError" style="color: red;"></span>
+            <input type="date" class="element" id="dob" th:field="*{dob}" placeholder="Enter Date of Birth">
+            <span id="dobError" style="color: red;"></span>            
+            <input class="submit" type="submit" value="signup">
         </form>
-        
-       
-
-        
-            <a href="Login" class="forgot">Already have an account? Login here</a>
-        </div>
-        <div th:include="footer"></div>
-    </body>
+        <a href="Login" class="forgot">Already have an account? Login here</a>
+    </div>
+</body>
 </html>
