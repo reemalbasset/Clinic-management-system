@@ -54,7 +54,7 @@
                 <li><a href="Specialties">Specialities</a></li>
                 <li><a href="aboutus">About Us</a></li>
                 <li><a href="clinicteam">Our Team</a></li>
-                <li th:if="${session.userType == 'admin'}"><a href="Dashboard">Dashboard</a></li>
+                <li th:if="${session.type eq 'admin'}"><a href="Dashboard">Dashboard</a></li>
     
             </ul>
     
