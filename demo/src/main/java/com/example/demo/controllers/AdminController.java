@@ -129,12 +129,12 @@ public ModelAndView saveDoctor(@ModelAttribute Doctor doctor,
     mav.setViewName("redirect:/Admin/addDoctor");
     return mav;
 }
-
-    // Display all doctors
-    // @GetMapping("viewDoctors")
-    // public String viewDoctors(Model model) {
-    //     List<Doctor> doctors = doctorRepository.findAll();
-    //     model.addAttribute("doctors", doctors);
-    //     return "view_doctors";
-    // }
+ 
+@GetMapping("view_doctors")
+public ModelAndView getCourses() {
+ModelAndView mav = new ModelAndView("view_doctors.html");
+List<Doctor> doctor = this.doctorRepository.findAll();
+mav.addObject("doctors", doctor);
+return mav;
+}
 }

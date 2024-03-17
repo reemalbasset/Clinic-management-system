@@ -5,8 +5,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Doctors</title>
+    <style>
+        /* style.css */
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Heading styles */
+h2 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Table styles */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+/* Table header styles */
+th {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Table cell styles */
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Table row hover effect */
+tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+/* Link styles */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+    </style>
 </head>
 <body>
+    <div th:include="sidebar"></div>
+
     <h1>Doctors</h1>
     <table>
         <thead>
@@ -24,5 +83,8 @@
             </tr>
         </tbody>
     </table>
+    <br><br>
+    <a href="Dashboard">dashboard</a>
+
 </body>
 </html>
