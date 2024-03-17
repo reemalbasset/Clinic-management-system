@@ -1,97 +1,209 @@
 <!-- add_doctor.html -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-    <title>Add Doctor</title>
-    <link rel="stylesheet" href="../css/add_doctor.css"> <!-- New CSS file for add_doctor.html -->
-    <style>
-        /* style.css */
-
-/* Body styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
-
-/* Form container styles */
-form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    margin: 20px auto;
-}
-
-/* Select styles */
-select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* Input field styles */
-input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* Submit button styles */
-input[type="submit"] {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-input[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-/* Link styles */
-a {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    color: #007bff;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="main-content">
-            <h1>Add Doctor</h1>
-            <div class="form-container">
-                <form action="/Admin/addDoctor" method="post" enctype="multipart/form-data" th:object="${doctor}">
-                    <label class="form-label" for="name">Name:</label><br>
-                    <input class="form-input" type="text" id="name" name="name" th:field="*{name}" required><br>
-                    <label class="form-label" for="specialization">Specialization:</label><br>
-                    <input class="form-input" type="text" id="specialization" name="specialization" th:field="*{specialization}" required><br>
-                    <input class="form-submit" type="submit" value="Add Doctor">
-                    <br><br>
-                    <a href="Dashboard">dashboard</a>
-                </form>
-            </div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Add Doctor</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+            }
+    
+            .container {
+                width: 80%;
+                max-width: 500px;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+    
+            .form-group {
+                margin: 10px 0;
+            }
+    
+            label {
+                display: block;
+                font-weight: bold;
+            }
+    
+            input[type="text"],
+            input[type="email"],
+            input[type="password"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+    
+            .error-message {
+                color: red;
+                font-size: 12px;
+            }
+    
+            .submit-button {
+                background-color: #007BFF;
+                color: #fff;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                margin-top: 20px;
+            }
+    
+            .submit-button:hover {
+                background-color: #0056b3;
+            }
+    
+            .back-button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #007BFF;
+                color: white;
+                text-decoration: none;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+    
+            .back-button:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div th:include="sidebar"></div>
+        <div class="container">
+            <h2>Add Doctor</h2>
+            <form id="registrationForm" method="POST" action="/Admin/addDoctor" th:object="${doctor}">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" th:field="*{name}" required placeholder="Enter Name">
+                    <span id="nameErrorMessage" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" th:field="*{email}" required placeholder="Enter Email">
+                    <span id="emailErrorMessage" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" th:field="*{password}" required placeholder="Enter Password">
+                    <span id="passwordErrorMessage" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="specialty">Specialty</label>
+                    <input type="text" id="specialty" name="specialty" th:field="*{specialty}" required placeholder="Enter Specialty">
+                    <span id="specialtyErrorMessage" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="universityName">University Name</label>
+                    <input type="text" id="universityName" name="universityName" th:field="*{universityName}" required placeholder="Enter University Name">
+                    <span id="universityNameErrorMessage" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="submit-button">Add</button>
+                </div>
+            </form>
         </div>
-    </div>
-</body>
+    
+        <script>
+            const registrationForm = document.getElementById('registrationForm');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const specialtyInput = document.getElementById('specialty');
+            const universityNameInput = document.getElementById('universityName');
+    
+            registrationForm.addEventListener('submit', function(event) {
+                if (!isFormValid()) {
+                    event.preventDefault();
+                }
+            });
+    
+            function isFormValid() {
+                let isValid = true;
+    
+                if (!validateName(nameInput.value)) {
+                    isValid = false;
+                }
+    
+                if (!validateEmail(emailInput.value)) {
+                    isValid = false;
+                }
+    
+                if (!validatePassword(passwordInput.value)) {
+                    isValid = false;
+                }
+    
+                if (!validateSpecialty(specialtyInput.value)) {
+                    isValid = false;
+                }
+    
+                if (!validateUniversityName(universityNameInput.value)) {
+                    isValid = false;
+                }
+    
+                return isValid;
+            }
+    
+            function validateName(name) {
+                const nameRegex = /^[A-Za-z ]+$/;
+                const nameErrorMessage = document.getElementById('nameErrorMessage');
+                if (!nameRegex.test(name)) {
+                    nameErrorMessage.textContent = 'Name must contain only alphabetical characters.';
+                    return false;
+                } else {
+                    nameErrorMessage.textContent = '';
+                    return true;
+                }
+            }
+    
+            function validateEmail(email) {
+                const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+                const emailErrorMessage = document.getElementById('emailErrorMessage');
+                if (!emailRegex.test(email)) {
+                    emailErrorMessage.textContent = 'Invalid email address.';
+                    return false;
+                } else {
+                    emailErrorMessage.textContent = '';
+                    return true;
+                }
+            }
+    
+            function validatePassword(password) {
+                const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                const passwordErrorMessage = document.getElementById('passwordErrorMessage');
+                if (!passwordRegex.test(password)) {
+                    passwordErrorMessage.textContent = 'Password must be at least 8 characters long and contain at least one letter and one digit.';
+                    return false;
+                } else {
+                    passwordErrorMessage.textContent = '';
+                    return true;
+                }
+            }
+    
+            function validateSpecialty(specialty) {
+                return true;
+            }
+    
+            function validateUniversityName(universityName) {
+                return true;
+            }
+        </script>
+    </body>
 </html>
