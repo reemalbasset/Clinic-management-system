@@ -53,6 +53,7 @@ public class AdminController {
     public ModelAndView viewprofile(HttpSession session) {
         ModelAndView mav = new ModelAndView("profile.html");
         mav.addObject("username", (String) session.getAttribute("username"));
+        mav.addObject("type", (String) session.getAttribute("type"));
         return mav;
     }
 
