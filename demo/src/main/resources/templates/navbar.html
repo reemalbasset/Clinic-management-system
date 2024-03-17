@@ -32,7 +32,7 @@
             <div class="col-3">
    
     
-    <a href="User/Login">
+                <a th:href="${session.username == null ? '/User/Login' : (session.userType == null ? '/User/Profile' : '/Admin/Dashboard')}">
         <i id="person" class="fa-regular fa-user fa-lg" style="color: #1f1fb8; margin-top: 7%;"></i>
     </a>
                 <button id="call"> Call 15262</button>
@@ -54,6 +54,7 @@
                 <li><a href="Specialties">Specialities</a></li>
                 <li><a href="aboutus">About Us</a></li>
                 <li><a href="clinicteam">Our Team</a></li>
+                <li th:if="${session.userType == 'admin'}"><a href="Dashboard">Dashboard</a></li>
     
             </ul>
     
@@ -61,5 +62,6 @@
     
     </body>
     <script src="../public/js/script.js"></script>
+    
     
 </html>
