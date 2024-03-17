@@ -1,19 +1,33 @@
 package com.example.demo.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.example.demo.models.Doctor;
 import com.example.demo.models.User;
+import com.example.demo.repositories.DoctorRepository;
 import com.example.demo.repositories.UserRepositry;
 
+
+
+
+import org.springframework.ui.Model;
+import java.nio.file.Path;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
@@ -78,4 +92,49 @@ public class AdminController {
         return mav;
     }
 
+
+
+
+
+
+
+
+    @Autowired
+    private DoctorRepository doctorRepository;
+
+    // Display form to add doctor
+  @GetMapping("addDoctor")
+public ModelAndView showAddDoctorForm() {
+    ModelAndView mav = new ModelAndView("add_doctor");
+    mav.addObject("doctor", new Doctor());
+    return mav;
+}
+
+@PostMapping("addDoctor")
+public ModelAndView saveDoctor(@ModelAttribute Doctor doctor,
+                               RedirectAttributes redirectAttributes) {
+    ModelAndView mav = new ModelAndView();
+    try {
+        // Save doctor details
+        doctorRepository.save(doctor);
+        redirectAttributes.addFlashAttribute("successMessage", "Doctor added successfully.");
+    } catch (DataIntegrityViolationException e) {
+        e.printStackTrace();
+        redirectAttributes.addFlashAttribute("errorMessage", "Failed to save doctor details due to a constraint violation.");
+    } catch (Exception e) {
+        e.printStackTrace();
+        redirectAttributes.addFlashAttribute("errorMessage", "Failed to save doctor details.");
+    }
+    // Redirect to the same page
+    mav.setViewName("redirect:/Admin/addDoctor");
+    return mav;
+}
+
+    // Display all doctors
+    // @GetMapping("viewDoctors")
+    // public String viewDoctors(Model model) {
+    //     List<Doctor> doctors = doctorRepository.findAll();
+    //     model.addAttribute("doctors", doctors);
+    //     return "view_doctors";
+    // }
 }

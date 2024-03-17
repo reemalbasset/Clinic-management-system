@@ -1,0 +1,26 @@
+<!-- add_doctor.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Doctor</title>
+    <link rel="stylesheet" href="../css/add_doctor.css"> <!-- New CSS file for add_doctor.html -->
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <h1>Add Doctor</h1>
+            <div class="form-container">
+                <form action="/Admin/addDoctor" method="post" enctype="multipart/form-data" th:object="${doctor}">
+                    <label class="form-label" for="name">Name:</label><br>
+                    <input class="form-input" type="text" id="name" name="name" th:field="*{name}" required><br>
+                    <label class="form-label" for="specialization">Specialization:</label><br>
+                    <input class="form-input" type="text" id="specialization" name="specialization" th:field="*{specialization}" required><br>
+                    <input class="form-submit" type="submit" value="Add Doctor">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
