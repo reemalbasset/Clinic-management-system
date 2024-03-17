@@ -13,7 +13,7 @@
 </div>
 
 <div class="sign">
-    <form th:action="@{/User/EditProfile}" method="post" th:object="${user}">
+    <form th:action="${session.userType == 'admin' ? '/Admin/EditProfile' : '/User/EditProfile'}" method="post" th:object="${user}">
         <input type="hidden" name="action" value="UpdateUser">
 
         <input id="name" type="text" class="element" th:field="*{name}" placeholder="Name"><br>

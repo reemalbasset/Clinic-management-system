@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,11 +87,12 @@ public class UserController {
        if (isPasswordMatched) {
          // Authentication successful: set the username attribute in the session
          session.setAttribute("username", dbUser.getUsername());
+         session.setAttribute("type", dbUser.getType());
          
          // Check user type
          if ("admin".equals(dbUser.getType())) {
              // If user is admin, redirect to dashboard
-             return new RedirectView("Dashboard");
+             return new RedirectView("/Admin/Dashboard");
          } else {
              // If user is not admin, redirect to profile
              return new RedirectView("Profile");
@@ -114,7 +116,7 @@ public class UserController {
         return mav;
       }
       
-       @GetMapping("Dashboard")
+       @GetMapping("/Admin/Dashboard")
        public ModelAndView viewdashboard(HttpSession session) {
           ModelAndView mav = new ModelAndView("dashboard.html");
           mav.addObject("username", (String) session.getAttribute("username"));
