@@ -84,15 +84,23 @@ public class UserController {
        // Check if the entered password matches the hashed password in the database
        Boolean isPasswordMatched = org.mindrot.jbcrypt.BCrypt.checkpw(password, dbUser.getPassword());
        if (isPasswordMatched) {
-           // Authentication successful: set the username attribute in the session and redirect to the profile page
-           session.setAttribute("username", dbUser.getUsername());
-           return new RedirectView("Profile");
-       } else {
-           // Add error message to redirect attributes if password is incorrect
-           redirectAttributes.addFlashAttribute("errorMessage", "Invalid password.");
-           return new RedirectView("Login");
-       }
-   }
+         // Authentication successful: set the username attribute in the session
+         session.setAttribute("username", dbUser.getUsername());
+         
+         // Check user type
+         if ("admin".equals(dbUser.getType())) {
+             // If user is admin, redirect to dashboard
+             return new RedirectView("Dashboard");
+         } else {
+             // If user is not admin, redirect to profile
+             return new RedirectView("Profile");
+         }
+     } else {
+         // Add error message to redirect attributes if password is incorrect
+         redirectAttributes.addFlashAttribute("errorMessage", "Invalid password.");
+         return new RedirectView("Login");
+     }
+ }
    
    
    
