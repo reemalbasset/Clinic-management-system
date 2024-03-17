@@ -237,7 +237,13 @@ public ModelAndView saveNurse(@ModelAttribute Nurse nurse,
     mav.setViewName("redirect:/Admin/addNurse");
     return mav;
 }
-
+@GetMapping("viewNurse")
+public ModelAndView getNurses() {
+ModelAndView mav = new ModelAndView("viewNurse");
+List<Nurse> nurses = this.nurserepository.findAll();
+mav.addObject("Nurses", nurses);
+return mav;
+}
 
 @Autowired
 private PatientRepository patientRepositry ;
