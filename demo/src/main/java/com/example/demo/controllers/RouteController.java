@@ -12,27 +12,27 @@ import com.example.demo.repositories.UserRepositry;
 public class RouteController {
       @Autowired
    private UserRepositry userRepositry;
-   @GetMapping("specialities")
+   @GetMapping("/User/specialities")
    public ModelAndView specialitiespage() {
        ModelAndView mav = new ModelAndView("specialities.html");
        return mav;
    }
-   @GetMapping("clinicteam")
+   @GetMapping("/User/clinicteam")
    public ModelAndView clinicteampage() {
        ModelAndView mav = new ModelAndView("clinicteam.html");
        return mav;
    }
-   @GetMapping("aboutus")
+   @GetMapping("/User/aboutus")
    public ModelAndView aboutuspage() {
        ModelAndView mav = new ModelAndView("aboutus.html");
        return mav;
    }
-   @GetMapping("doctorslist")
+   @GetMapping("/User/doctorslist")
    public ModelAndView doctorslistpage() {
        ModelAndView mav = new ModelAndView("doctorslist.html");
        return mav;
    }
-   @GetMapping("doctorsdetails")
+   @GetMapping("/User/doctorsdetails")
    public ModelAndView doctorsdetailspage() {
        ModelAndView mav = new ModelAndView("doctorsdetails.html");
        return mav;

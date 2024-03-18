@@ -46,12 +46,13 @@ public class UserController {
        return mav;
    }
    @PostMapping("Registration")
-   public String saveUser(@ModelAttribute User user) {
+   public ModelAndView saveUser(@ModelAttribute User user) {
       String encoddedPassword=org.mindrot.jbcrypt.BCrypt.hashpw(user.getPassword(),org.mindrot.jbcrypt.BCrypt.gensalt(12));
       user.setPassword(encoddedPassword);
       this.userRepositry.save(user);
+      ModelAndView mav=new ModelAndView("login.html");
        
-       return "added";
+       return mav;
    }
    @GetMapping("Login")
    public ModelAndView login() {
