@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -195,6 +196,69 @@ public ModelAndView saveDoctor(@ModelAttribute Doctor doctor,
     return mav;
 }
  
+
+// @GetMapping("updateDoctor")
+// public ModelAndView editDoctor(@RequestParam Long id) {
+//     ModelAndView mav = new ModelAndView("updateDoctor");
+//     Doctor doctor = doctorRepository.findById(id).orElse(null);
+
+//     if (doctor == null) {
+//         // If doctor is not found, add an error message and redirect
+//         mav.addObject("errorMessage", "Doctor not found");
+//         mav.setViewName("redirect:/Admin/view_doctors");
+//     } else {
+//         // If doctor is found, add the doctor object to the view
+//         mav.addObject("doctor", doctor);
+//     }
+
+//     return mav;
+// }
+
+// @PostMapping("updateDoctor")
+// public RedirectView updateDoctor(@ModelAttribute Doctor updatedDoctor, RedirectAttributes redirectAttributes) {
+//     Doctor existingDoctor = doctorRepository.findById(updatedDoctor.getId()).orElse(null);
+
+//     if (existingDoctor != null) {
+//         try {
+//             // Update doctor details
+//             existingDoctor.setName(updatedDoctor.getName());
+//             existingDoctor.setEmail(updatedDoctor.getEmail());
+//             existingDoctor.setSpecialty(updatedDoctor.getSpecialty());
+//             existingDoctor.setUniversityName(updatedDoctor.getUniversityName());
+
+//             // Handle password update
+//             if (!updatedDoctor.getPassword().isEmpty()) {
+//                 // Hash the new password
+//                 existingDoctor.setPassword(BCrypt.hashpw(updatedDoctor.getPassword(), BCrypt.gensalt(12)));
+//             }
+
+//             // Save the updated doctor information
+//             doctorRepository.save(existingDoctor);
+
+//             // Add a success message
+//             redirectAttributes.addFlashAttribute("successMessage", "Doctor updated successfully.");
+//             // Redirect to the list of doctors
+//             return new RedirectView("/Admin/view_doctors", true);
+//         } catch (Exception e) {
+//             // Log the exception for debugging
+//             e.printStackTrace();
+//             // Add an error message and redirect back to the edit form
+//             redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while updating the doctor.");
+//             return new RedirectView("/Admin/updateDoctor?id=" + updatedDoctor.getId(), true);
+//         }
+//     } else {
+//         // Doctor not found, redirect to the list of doctors
+//         redirectAttributes.addFlashAttribute("errorMessage", "Doctor not found.");
+//         return new RedirectView("/Admin/view_doctors", true);
+//     }
+// }
+
+
+
+
+
+
+
 @GetMapping("view_doctors")
 public ModelAndView getCourses() {
 ModelAndView mav = new ModelAndView("view_doctors.html");
@@ -202,10 +266,25 @@ List<Doctor> doctor = this.doctorRepository.findAll();
 mav.addObject("doctors", doctor);
 return mav;
 }
-@PostMapping("/deleteDoctor")
-public String deletdr(@RequestParam("doctorId") Long doctorId) {
-    doctorRepository.deleteById((long) doctorId);
-    return "redirect:/view_doctors";
+@PostMapping("deleteDoctor")
+public RedirectView deleteDoctor(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+    try {
+        // Check if the doctor exists
+        Optional<Doctor> doctorOptional = doctorRepository.findById(id);
+        if (doctorOptional.isPresent()) {
+            // Delete the doctor from the database
+            doctorRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Doctor deleted successfully.");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Doctor not found.");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while deleting the doctor.");
+    }
+    
+    // Redirect back to the view_doctors page after deletion
+    return new RedirectView("/Admin/view_doctors", true);
 }
 
 @Autowired

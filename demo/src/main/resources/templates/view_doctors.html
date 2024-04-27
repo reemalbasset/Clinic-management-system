@@ -30,7 +30,9 @@
                 <td th:text="${doctor.name}"></td>
                 <td th:text="${doctor.email}"></td>
                 <td><a th:href="@{/Admin/updateDoctor/{id}(id=${doctor.id})}" class="edit-button">Edit</a></td>
-                <td><a th:href="@{/Admin/view_doctors}" class="delete-button">Delete</a></td>
+                <td> <form th:action="@{/Admin/deleteDoctor(id=${doctor.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="delete-button">Delete</button>
+                </form></td>
             </tr>
         </tbody>
     </table>
