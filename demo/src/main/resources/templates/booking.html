@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -16,9 +17,9 @@
     </div>
     <br><br>
     <div class="bookingform">
-        <form action="../view/process.php" method="post">
+        <form action="/booking" method="post"> <!-- Corrected action attribute -->
             <label for="doctor_id">Select Doctor:</label>
-            <select name="doctor_id" required class="opt1">
+            <select name="doctorId" required class="opt1"> <!-- Corrected name attribute -->
                 <option value="">Select Doctor</option>
                 <th:block th:each="doctor : ${doctors}">
                     <option th:value="${doctor.id}" th:text="${doctor.name}"></option>
@@ -26,7 +27,7 @@
             </select><br><br>
             
             <label for="nurse_id">Select Nurse:</label>
-            <select name="nurse_id" required class="opt1">
+            <select name="nurseId" required class="opt1"> <!-- Corrected name attribute -->
                 <option value="">Select Nurse</option>
                 <th:block th:each="nurse : ${nurses}">
                     <option th:value="${nurse.id}" th:text="${nurse.name}"></option>
@@ -34,11 +35,17 @@
             </select><br><br>
             
             <label for="patient_name">Patient Name:</label>
-            <input type="text" id="patient_name" name="patient_name" required><br><br>
+            <input type="text" id="patient_name" name="patientName" required><br><br> <!-- Corrected name attribute -->
+            
             <label for="appointment_date">Appointment Date:</label>
-            <input type="date" class="opt3" name="appointment_date" required><br><br>
+            <input type="date" class="opt3" name="appointmentDate" required><br><br> <!-- Corrected name attribute -->
+            
             <label for="appointment_time">Appointment Time:</label>
-            <input type="time" class="opt4" name="appointment_time" required><br><br>
+            <input type="time" class="opt4" name="appointmentTime" required><br><br> <!-- Corrected name attribute -->
+            
+            <label for="reason">Reason:</label>
+            <textarea name="reason" rows="4" cols="50" required></textarea><br><br>
+            
             <input type="submit" class="submitbtn" value="Book Appointment">
             <button class="cancelbtn"><a class="cancelbtn1" href="../">Cancel</a></button>
         </form>

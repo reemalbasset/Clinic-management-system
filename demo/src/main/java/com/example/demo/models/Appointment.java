@@ -20,22 +20,24 @@ public class Appointment {
     @ManyToOne
     private Nurse nurse;
 
-    @ManyToOne
-    private Patient patient;
+    private String patientName; // New field
 
     private Date appointmentDate;
+
+    private String appointmentTime;
 
     private String reason;
 
     public Appointment() {
     }
 
-    public Appointment(Long id, Doctor doctor, Nurse nurse, Patient patient, Date appointmentDate, String reason) {
+    public Appointment(Long id, Doctor doctor, Nurse nurse, String patientName, Date appointmentDate, String appointmentTime, String reason) {
         this.id = id;
         this.doctor = doctor;
         this.nurse = nurse;
-        this.patient = patient;
+        this.patientName = patientName;
         this.appointmentDate = appointmentDate;
+        this.appointmentTime = appointmentTime;
         this.reason = reason;
     }
 
@@ -63,12 +65,12 @@ public class Appointment {
         this.nurse = nurse;
     }
 
-    public Patient getPatient() {
-        return this.patient;
+    public String getPatientName() {
+        return this.patientName;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
     }
 
     public Date getAppointmentDate() {
@@ -79,12 +81,55 @@ public class Appointment {
         this.appointmentDate = appointmentDate;
     }
 
+    public String getAppointmentTime() {
+        return this.appointmentTime;
+    }
+
+    public void setAppointmentTime(String appointmentTime) {
+        this.appointmentTime = appointmentTime;
+    }
+
     public String getReason() {
         return this.reason;
     }
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public Appointment id(Long id) {
+        setId(id);
+        return this;
+    }
+
+    public Appointment doctor(Doctor doctor) {
+        setDoctor(doctor);
+        return this;
+    }
+
+    public Appointment nurse(Nurse nurse) {
+        setNurse(nurse);
+        return this;
+    }
+
+    public Appointment patientName(String patientName) {
+        setPatientName(patientName);
+        return this;
+    }
+
+    public Appointment appointmentDate(Date appointmentDate) {
+        setAppointmentDate(appointmentDate);
+        return this;
+    }
+
+    public Appointment appointmentTime(String appointmentTime) {
+        setAppointmentTime(appointmentTime);
+        return this;
+    }
+
+    public Appointment reason(String reason) {
+        setReason(reason);
+        return this;
     }
 
     @Override
@@ -95,12 +140,12 @@ public class Appointment {
             return false;
         }
         Appointment appointment = (Appointment) o;
-        return Objects.equals(id, appointment.id) && Objects.equals(doctor, appointment.doctor) && Objects.equals(nurse, appointment.nurse) && Objects.equals(patient, appointment.patient) && Objects.equals(appointmentDate, appointment.appointmentDate) && Objects.equals(reason, appointment.reason);
+        return Objects.equals(id, appointment.id) && Objects.equals(doctor, appointment.doctor) && Objects.equals(nurse, appointment.nurse) && Objects.equals(patientName, appointment.patientName) && Objects.equals(appointmentDate, appointment.appointmentDate) && Objects.equals(appointmentTime, appointment.appointmentTime) && Objects.equals(reason, appointment.reason);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, doctor, nurse, patient, appointmentDate, reason);
+        return Objects.hash(id, doctor, nurse, patientName, appointmentDate, appointmentTime, reason);
     }
 
     @Override
@@ -109,9 +154,11 @@ public class Appointment {
             " id='" + getId() + "'" +
             ", doctor='" + getDoctor() + "'" +
             ", nurse='" + getNurse() + "'" +
-            ", patient='" + getPatient() + "'" +
+            ", patientName='" + getPatientName() + "'" +
             ", appointmentDate='" + getAppointmentDate() + "'" +
+            ", appointmentTime='" + getAppointmentTime() + "'" +
             ", reason='" + getReason() + "'" +
             "}";
     }
+
 }
