@@ -29,10 +29,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/User")
 public class UserController {
-   @Autowired
-   private UserRepositry userRepositry;
-   
-   @GetMapping("/")
+ 
+private final UserRepositry userRepositry;
+
+@Autowired
+public UserController(UserRepositry userRepository) {
+    this.userRepositry = userRepository;
+}
+
+@GetMapping("/")
    public ModelAndView index() {
        ModelAndView mav = new ModelAndView("index.html");
        return mav;
