@@ -115,7 +115,6 @@ public UserController(UserRepositry userRepository) {
       @GetMapping("Profile")
       public ModelAndView viewprofile(HttpSession session) {
         ModelAndView mav = new ModelAndView("profile.html");
-        ModelAndView mav1 = new ModelAndView("profile.html");
         mav.addObject("username",(String)session.getAttribute("username"));
         mav.addObject("name",(String)session.getAttribute("name"));
         mav.addObject("dob",(String)session.getAttribute("dob"));
