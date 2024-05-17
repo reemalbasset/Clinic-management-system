@@ -3,6 +3,7 @@ package com.example.demo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -82,6 +83,45 @@ public class UserTest {
         assertEquals("Test Name", mav.getModel().get("name"));
         assertEquals("2000-01-01", mav.getModel().get("dob"));
     }
+    @Test
+public void testUpdateProfile() {
+    UserRepositry userRepository = mock(UserRepositry.class);
+    HttpSession session = mock(HttpSession.class);
+    RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+
+    when(session.getAttribute("username")).thenReturn("testUser");
+
+    User existingUser = new User();
+    existingUser.setUsername("testUser");
+    existingUser.setName("Old Name");
+    existingUser.setDob("1990-01-01");
+    existingUser.setPassword("oldPassword");
+
+    // Set the mock UserRepository to return the existing user when findByUsername is called
+    when(userRepository.findByUsername("testUser")).thenReturn(existingUser);
+
+    UserController userController = new UserController(userRepository);
+
+    User updatedUser = new User();
+    updatedUser.setUsername("newUser");
+    updatedUser.setName("New Name");
+    updatedUser.setDob("2000-01-01");
+    updatedUser.setPassword("newPassword");
+
+    RedirectView redirectView = userController.updateProfile(updatedUser, session, redirectAttributes);
+
+    assertEquals("/User/Profile", redirectView.getUrl());
+
+    verify(userRepository, times(1)).save(existingUser);
+
+    assertEquals("New Name", existingUser.getName());
+    assertEquals("2000-01-01", existingUser.getDob());
+    assertEquals("newUser", existingUser.getUsername());
+
+    assertNotNull(existingUser.getPassword());
+    assertFalse(existingUser.getPassword().equals("newPassword"));
+}
+
     @Test
     public void testLogin() {
         // Create a mock UserRepository
