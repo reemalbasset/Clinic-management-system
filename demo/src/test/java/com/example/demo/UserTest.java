@@ -2,6 +2,7 @@ package com.example.demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -215,6 +216,23 @@ public class UserTest {
         // Verify that session attributes are set
         verify(session).setAttribute("username", "testUser");
         verify(session).setAttribute("type", "user");
+    }
+    @Test
+    public void testLogout() {
+        // Create a mock HttpSession
+        HttpSession session = mock(HttpSession.class);
+        // Create a UserController instance
+        UserController userController = new UserController(null);
+
+        // Call the logout method
+        RedirectView redirectView = userController.logout(session);
+
+        // Verify that session.invalidate() is called
+        verify(session).invalidate();
+        // Assert the redirection view
+        assertEquals("/User/Login", redirectView.getUrl());
+        // Assert that the redirection is context relative
+        assertTrue(redirectView.getUrl().startsWith("/"));
     }
 
 }
