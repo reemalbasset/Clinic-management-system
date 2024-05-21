@@ -79,12 +79,7 @@ public class RouteController {
 
     @GetMapping("booking")
     public ModelAndView bookingpage() {
-        ModelAndView mav = new ModelAndView("booking.html");
-        List<Doctor> doctors = doctorRepository.findAll();
-        List<Nurse> nurses = nurseRepository.findAll();
-        mav.addObject("doctors", doctors);
-        mav.addObject("nurses", nurses);
-        return mav;
+        return getBookingPageModelAndView(new ModelAndView("booking.html"));
     }
 
     @PostMapping("/booking")
@@ -107,7 +102,7 @@ public class RouteController {
                 selectedTime = LocalTime.parse(appointmentTimeStr);
             } catch (DateTimeParseException e) {
                 model.addAttribute("error", "Invalid time format. Please use HH:mm format.");
-                return "booking";
+                return getBookingPage(model);
             }
 
             if (selectedDate.isBefore(currentDate) || (selectedDate.isEqual(currentDate) && selectedTime.isBefore(currentTime))) {
@@ -145,10 +140,26 @@ public class RouteController {
 
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
-            return "booking";
+            return getBookingPage(model);
         } catch (Exception e) {
             model.addAttribute("error", "An unexpected error occurred: " + e.getMessage());
-            return "booking";
+            return getBookingPage(model);
         }
+    }
+
+    private ModelAndView getBookingPageModelAndView(ModelAndView mav) {
+        List<Doctor> doctors = doctorRepository.findAll();
+        List<Nurse> nurses = nurseRepository.findAll();
+        mav.addObject("doctors", doctors);
+        mav.addObject("nurses", nurses);
+        return mav;
+    }
+
+    private String getBookingPage(Model model) {
+        List<Doctor> doctors = doctorRepository.findAll();
+        List<Nurse> nurses = nurseRepository.findAll();
+        model.addAttribute("doctors", doctors);
+        model.addAttribute("nurses", nurses);
+        return "booking";
     }
 }
