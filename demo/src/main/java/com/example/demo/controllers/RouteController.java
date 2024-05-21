@@ -72,12 +72,6 @@ public class RouteController {
         return mav;
     }
 
-    @Autowired
-    private DoctorRepository doctorRepository;
-
-    @Autowired
-    private NurseRepository nurseRepository;
-
     @GetMapping("booking")
     public ModelAndView bookingpage() {
         ModelAndView mav = new ModelAndView("booking.html");
