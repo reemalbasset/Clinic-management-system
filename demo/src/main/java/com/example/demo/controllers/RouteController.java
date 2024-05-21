@@ -1,75 +1,80 @@
 package com.example.demo.controllers;
 
 import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.models.Appointment;
 import com.example.demo.models.Doctor;
 import com.example.demo.models.Nurse;
+import com.example.demo.repositories.AppointmentRepository;
 import com.example.demo.repositories.DoctorRepository;
 import com.example.demo.repositories.NurseRepository;
-import com.example.demo.repositories.UserRepositry;
-import com.example.demo.repositories.AppointmentRepository;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/")
 public class RouteController {
+
     @Autowired
-    private UserRepositry userRepository;
-    
+    private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private DoctorRepository doctorRepository;
+
+    @Autowired
+    private NurseRepository nurseRepository;
+
     @GetMapping("/User/specialities")
     public ModelAndView specialitiespage() {
-        ModelAndView mav = new ModelAndView("specialities.html");
-        return mav;
+        return new ModelAndView("specialities.html");
     }
-    
+
     @GetMapping("/User/clinicteam")
     public ModelAndView clinicteampage() {
-        ModelAndView mav = new ModelAndView("clinicteam.html");
-        return mav;
+        return new ModelAndView("clinicteam.html");
     }
-    
+
     @GetMapping("/User/aboutus")
     public ModelAndView aboutuspage() {
-        ModelAndView mav = new ModelAndView("aboutus.html");
-        return mav;
+        return new ModelAndView("aboutus.html");
     }
-    
+
     @GetMapping("/User/doctorslist")
     public ModelAndView doctorslistpage() {
-        ModelAndView mav = new ModelAndView("doctorslist.html");
-        return mav;
+        return new ModelAndView("doctorslist.html");
     }
-    
+
     @GetMapping("/User/doctorsdetails")
     public ModelAndView doctorsdetailspage() {
-        ModelAndView mav = new ModelAndView("doctorsdetails.html");
-        return mav;
+        return new ModelAndView("doctorsdetails.html");
     }
+
     @GetMapping("/User/appointmentreview")
     public ModelAndView appointmentreviewpageusr() {
-        ModelAndView mav = new ModelAndView("appointmentreview.html");
-        return mav;
+        return new ModelAndView("appointmentreview.html");
     }
-    
+
     @GetMapping("appointmentreview")
     public ModelAndView appointmentreviewpage() {
-        ModelAndView mav = new ModelAndView("appointmentreview.html");
-        return mav;
+        return new ModelAndView("appointmentreview.html");
     }
 
     @GetMapping("specialities")
     public ModelAndView specialitiespageIndex() {
-        ModelAndView mav = new ModelAndView("specialities.html");
-        return mav;
+        return new ModelAndView("specialities.html");
     }
 
     @GetMapping("booking")
@@ -81,21 +86,6 @@ public class RouteController {
         mav.addObject("nurses", nurses);
         return mav;
     }
-}
-
-@Controller
-class BookingController {
-
-    private final AppointmentRepository appointmentRepository;
-    private final DoctorRepository doctorRepository;
-    private final NurseRepository nurseRepository;
-
-    @Autowired
-    public BookingController(AppointmentRepository appointmentRepository, DoctorRepository doctorRepository, NurseRepository nurseRepository) {
-        this.appointmentRepository = appointmentRepository;
-        this.doctorRepository = doctorRepository;
-        this.nurseRepository = nurseRepository;
-    }
 
     @PostMapping("/booking")
     public String bookAppointment(
@@ -103,25 +93,62 @@ class BookingController {
             @RequestParam Long nurseId,
             @RequestParam String patientName,
             @RequestParam Date appointmentDate,
-            @RequestParam String appointmentTime,
-            @RequestParam String reason) {
+            @RequestParam String appointmentTimeStr,
+            @RequestParam String reason,
+            Model model) {
 
-        Doctor doctor = doctorRepository.findById(doctorId).orElse(null);
-        Nurse nurse = nurseRepository.findById(nurseId).orElse(null);
+        try {
+            LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
+            LocalDate selectedDate = appointmentDate.toLocalDate();
+            LocalTime selectedTime;
 
-        if (doctor != null && nurse != null) {
+            try {
+                selectedTime = LocalTime.parse(appointmentTimeStr);
+            } catch (DateTimeParseException e) {
+                model.addAttribute("error", "Invalid time format. Please use HH:mm format.");
+                return "booking";
+            }
+
+            if (selectedDate.isBefore(currentDate) || (selectedDate.isEqual(currentDate) && selectedTime.isBefore(currentTime))) {
+                throw new IllegalArgumentException("You cannot book an appointment in the past.");
+            }
+
+            LocalTime oneHourAhead = selectedTime.plusHours(1);
+            LocalTime oneHourBefore = selectedTime.minusHours(1);
+
+            List<Appointment> appointments = appointmentRepository.findByAppointmentDateAndAppointmentTimeBetween(
+                    appointmentDate, Time.valueOf(oneHourBefore), Time.valueOf(oneHourAhead));
+            if (!appointments.isEmpty()) {
+                throw new IllegalArgumentException("There is already an appointment within an hour of the selected time. Please choose a different time.");
+            }
+
+            Optional<Appointment> existingAppointment = appointmentRepository.findByDoctorIdAndAppointmentDateAndAppointmentTime(
+                    doctorId, appointmentDate, Time.valueOf(selectedTime));
+            if (existingAppointment.isPresent()) {
+                throw new IllegalArgumentException("The selected time slot is already booked. Please choose a different time.");
+            }
+
+            Doctor doctor = doctorRepository.findById(doctorId).orElseThrow(() -> new IllegalArgumentException("Invalid doctor ID"));
+            Nurse nurse = nurseRepository.findById(nurseId).orElseThrow(() -> new IllegalArgumentException("Invalid nurse ID"));
+
             Appointment appointment = new Appointment();
             appointment.setDoctor(doctor);
             appointment.setNurse(nurse);
             appointment.setPatientName(patientName);
             appointment.setAppointmentDate(appointmentDate);
-            appointment.setAppointmentTime(appointmentTime);
+            appointment.setAppointmentTime(Time.valueOf(selectedTime));
             appointment.setReason(reason);
 
             appointmentRepository.save(appointment);
-            return "redirect:/appointmentreview"; // Redirect to a success page
-        } else {
-            return "redirect:/error-page"; // Redirect to an error page
+            return "redirect:/appointmentreview";
+
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "booking";
+        } catch (Exception e) {
+            model.addAttribute("error", "An unexpected error occurred: " + e.getMessage());
+            return "booking";
         }
     }
 }

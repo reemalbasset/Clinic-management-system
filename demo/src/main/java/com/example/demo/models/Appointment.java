@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+
+import java.sql.Time;
 import java.util.Date;
 import java.util.Objects;
 
@@ -20,18 +22,18 @@ public class Appointment {
     @ManyToOne
     private Nurse nurse;
 
-    private String patientName; // New field
+    private String patientName;
 
     private Date appointmentDate;
 
-    private String appointmentTime;
+    private Time appointmentTime;
 
     private String reason;
 
     public Appointment() {
     }
 
-    public Appointment(Long id, Doctor doctor, Nurse nurse, String patientName, Date appointmentDate, String appointmentTime, String reason) {
+    public Appointment(Long id, Doctor doctor, Nurse nurse, String patientName, Date appointmentDate, Time appointmentTime, String reason) {
         this.id = id;
         this.doctor = doctor;
         this.nurse = nurse;
@@ -81,11 +83,11 @@ public class Appointment {
         this.appointmentDate = appointmentDate;
     }
 
-    public String getAppointmentTime() {
+    public Time getAppointmentTime() {
         return this.appointmentTime;
     }
 
-    public void setAppointmentTime(String appointmentTime) {
+    public void setAppointmentTime(Time appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
 
@@ -95,41 +97,6 @@ public class Appointment {
 
     public void setReason(String reason) {
         this.reason = reason;
-    }
-
-    public Appointment id(Long id) {
-        setId(id);
-        return this;
-    }
-
-    public Appointment doctor(Doctor doctor) {
-        setDoctor(doctor);
-        return this;
-    }
-
-    public Appointment nurse(Nurse nurse) {
-        setNurse(nurse);
-        return this;
-    }
-
-    public Appointment patientName(String patientName) {
-        setPatientName(patientName);
-        return this;
-    }
-
-    public Appointment appointmentDate(Date appointmentDate) {
-        setAppointmentDate(appointmentDate);
-        return this;
-    }
-
-    public Appointment appointmentTime(String appointmentTime) {
-        setAppointmentTime(appointmentTime);
-        return this;
-    }
-
-    public Appointment reason(String reason) {
-        setReason(reason);
-        return this;
     }
 
     @Override
