@@ -36,7 +36,7 @@
                             History
                         </a>
                     </li>
-                    <li th:if="${session.type eq 'admin'}">
+                    <li th:if="${session.role eq 'Admin'}">
                       <a href="/Admin/Dashboard">
                           <i class="fa-solid fa-chart-bar"></i>
                           Dashboard
