@@ -183,5 +183,33 @@ public UserController(UserRepositry userRepository) {
         return new RedirectView("/User/Login", true);
     }
 
+    @GetMapping("Delete")
+    public ModelAndView deleteUserConfirm(HttpSession session) {
+        ModelAndView mav = new ModelAndView("deleteConfirmation.html");
+        mav.addObject("username", session.getAttribute("username"));
+        return mav;
+    }
 
-   }
+    @PostMapping("Delete")
+    public RedirectView deleteUser(HttpSession session, RedirectAttributes redirectAttributes) {
+        String username = (String) session.getAttribute("username");
+        User user = userRepositry.findByUsername(username);
+
+        if (user != null) {
+            userRepositry.delete(user);
+            session.invalidate();
+            redirectAttributes.addFlashAttribute("message", "User account deleted successfully.");
+            return new RedirectView("/User/Login", true);
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "User not found. Please try again.");
+            return new RedirectView("/User/Delete", true);
+        }
+    }
+    @GetMapping("/deleteaccount")
+    public ModelAndView deleteaccountpageIndex() {
+        return new ModelAndView("deleteConfirmation.html");
+    }
+}
+
+
+   

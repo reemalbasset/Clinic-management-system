@@ -176,6 +176,7 @@ public class AdminController {
         return mav;
     }
     
+    //a
     @PostMapping("/addDoctor")
     public ModelAndView saveDoctor(@ModelAttribute("doctor") Doctor doctor,
                                    RedirectAttributes redirectAttributes) {
@@ -304,7 +305,9 @@ public ModelAndView saveNurse(@ModelAttribute Nurse nurse,
                                RedirectAttributes redirectAttributes) {
     ModelAndView mav = new ModelAndView();
     try {
-        // Save doctor details
+        // Save Nurse details
+        String encoddedPassword=org.mindrot.jbcrypt.BCrypt.hashpw(nurse.getPassword(),org.mindrot.jbcrypt.BCrypt.gensalt(12));
+      nurse.setPassword(encoddedPassword);
         nurserepository.save(nurse);
         redirectAttributes.addFlashAttribute("successMessage", "Doctor added successfully.");
     } catch (DataIntegrityViolationException e) {
@@ -328,22 +331,23 @@ return mav;
 
 @Autowired
 private PatientRepository patientRepositry ;
-
 @GetMapping("addPatient")
-public ModelAndView showpatientForm() {
+public ModelAndView showPatientForm() {
     ModelAndView mav = new ModelAndView("add_patient");
     mav.addObject("patient", new Patient());
     return mav;
-
 }
+
 @PostMapping("addPatient")
 public ModelAndView savePatient(@ModelAttribute Patient patient,
                                RedirectAttributes redirectAttributes) {
     ModelAndView mav = new ModelAndView();
     try {
-        // Save doctor details
+        // Save patient details
+        String encoddedPassword=org.mindrot.jbcrypt.BCrypt.hashpw(patient.getPassword(),org.mindrot.jbcrypt.BCrypt.gensalt(12));
+      patient.setPassword(encoddedPassword);
         patientRepositry.save(patient);
-        redirectAttributes.addFlashAttribute("successMessage", "patient added successfully.");
+        redirectAttributes.addFlashAttribute("successMessage", "Patient added successfully.");
     } catch (DataIntegrityViolationException e) {
         e.printStackTrace();
         redirectAttributes.addFlashAttribute("errorMessage", "Failed to save patient details due to a constraint violation.");

@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Nurse</title>
     <link rel="stylesheet" href="../css/addNurse.css">
-
 </head>
 <body>
     <div th:include="sidebar"></div>
     <div class="container">
         <h2>Add Nurse</h2>
         <form id="registrationForm" method="POST" action="/Admin/addNurse" th:object="${nurse}">
-            <input type="hidden" name="action" value="addnurse">
+            <input type="hidden" name="action" value="addNurse">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" id="name" th:field="*{name}" required placeholder="Enter Name">
@@ -34,6 +33,5 @@
         </form>
     </div>
     <script th:src="@{../js/addNurse.js}"></script>
-
 </body>
 </html>
