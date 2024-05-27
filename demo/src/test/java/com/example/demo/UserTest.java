@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -273,6 +275,78 @@ public void testUpdateProfile() {
         assertEquals("/User/Login", redirectView.getUrl());
         // Assert that the redirection is context relative
         assertTrue(redirectView.getUrl().startsWith("/"));
+    }
+    @Test
+   public void testDeleteUserConfirm() {
+        // Create a mock HttpSession
+        HttpSession session = mock(HttpSession.class);
+        // Set up mock behavior for session
+        when(session.getAttribute("username")).thenReturn("testUser");
+        
+        // Create a UserController instance
+        UserRepositry userRepositry = mock(UserRepositry.class);
+        UserController userController = new UserController(userRepositry);
+
+        // Call the deleteUserConfirm method
+        ModelAndView mav = userController.deleteUserConfirm(session);
+
+        // Assert the view name
+        assertEquals("deleteConfirmation.html", mav.getViewName());
+        // Assert that the username is added to the ModelAndView
+        assertEquals("testUser", mav.getModel().get("username"));
+    }
+    @Test
+    public void testDeleteUserSuccess() {
+        // Create mock objects
+        UserRepositry userRepositry = mock(UserRepositry.class);
+        HttpSession session = mock(HttpSession.class);
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+
+        // Create a UserController instance with the mock UserRepository
+        UserController userController = new UserController(userRepositry);
+
+        // Set up mock behavior
+        when(session.getAttribute("username")).thenReturn("testUser");
+        User user = new User();
+        user.setUsername("testUser");
+        when(userRepositry.findByUsername("testUser")).thenReturn(user);
+
+        // Call the deleteUser method
+        RedirectView redirectView = userController.deleteUser(session, redirectAttributes);
+
+        // Verify interactions
+        verify(userRepositry, times(1)).delete(user);
+        verify(session, times(1)).invalidate();
+        verify(redirectAttributes).addFlashAttribute("message", "User account deleted successfully.");
+
+        // Assert the redirection view
+        assertEquals("/User/Login", redirectView.getUrl());
+    }
+
+    @Test
+    public void testDeleteUserNotFound() {
+        // Create mock objects
+        UserRepositry userRepositry = mock(UserRepositry.class);
+        HttpSession session = mock(HttpSession.class);
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+
+        // Create a UserController instance with the mock UserRepository
+        UserController userController = new UserController(userRepositry);
+
+        // Set up mock behavior
+        when(session.getAttribute("username")).thenReturn("testUser");
+        when(userRepositry.findByUsername("testUser")).thenReturn(null);
+
+        // Call the deleteUser method
+        RedirectView redirectView = userController.deleteUser(session, redirectAttributes);
+
+        // Verify interactions
+        verify(userRepositry, never()).delete(any());
+        verify(session, never()).invalidate();
+        verify(redirectAttributes).addFlashAttribute("errorMessage", "User not found. Please try again.");
+
+        // Assert the redirection view
+        assertEquals("/User/Delete", redirectView.getUrl());
     }
 
 }
