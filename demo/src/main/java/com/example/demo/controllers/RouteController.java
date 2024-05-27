@@ -162,4 +162,8 @@ public class RouteController {
         model.addAttribute("nurses", nurses);
         return "booking";
     }
+    @GetMapping("/deleteaccount")
+    public ModelAndView deleteaccountpageIndex() {
+        return new ModelAndView("deleteConfirmation.html");
+    }
 }
