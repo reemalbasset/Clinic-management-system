@@ -169,32 +169,34 @@ public class AdminController {
     private DoctorRepository doctorRepository;
 
     // Display form to add doctor
-  @GetMapping("addDoctor")
-public ModelAndView showAddDoctorForm() {
-    ModelAndView mav = new ModelAndView("add_doctor");
-    mav.addObject("doctor", new Doctor());
-    return mav;
-}
-
-@PostMapping("addDoctor")
-public ModelAndView saveDoctor(@ModelAttribute Doctor doctor,
-                               RedirectAttributes redirectAttributes) {
-    ModelAndView mav = new ModelAndView();
-    try {
-        // Save doctor details
-        doctorRepository.save(doctor);
-        redirectAttributes.addFlashAttribute("successMessage", "Doctor added successfully.");
-    } catch (DataIntegrityViolationException e) {
-        e.printStackTrace();
-        redirectAttributes.addFlashAttribute("errorMessage", "Failed to save doctor details due to a constraint violation.");
-    } catch (Exception e) {
-        e.printStackTrace();
-        redirectAttributes.addFlashAttribute("errorMessage", "Failed to save doctor details.");
+    @GetMapping("addDoctor")
+    public ModelAndView showAddDoctorForm() {
+        ModelAndView mav = new ModelAndView("add_doctor");
+        mav.addObject("doctor", new Doctor());
+        return mav;
     }
-    // Redirect to the same page
-    mav.setViewName("redirect:/Admin/addDoctor");
-    return mav;
-}
+    
+    @PostMapping("/addDoctor")
+    public ModelAndView saveDoctor(@ModelAttribute("doctor") Doctor doctor,
+                                   RedirectAttributes redirectAttributes) {
+        ModelAndView mav = new ModelAndView();
+        try {
+            // Save doctor details
+            String encoddedPassword=org.mindrot.jbcrypt.BCrypt.hashpw(doctor.getPassword(),org.mindrot.jbcrypt.BCrypt.gensalt(12));
+      doctor.setPassword(encoddedPassword);
+            doctorRepository.save(doctor);
+            redirectAttributes.addFlashAttribute("successMessage", "Doctor added successfully.");
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save doctor details due to a constraint violation.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save doctor details.");
+        }
+        // Redirect to the same page
+        mav.setViewName("redirect:/Admin/addDoctor");
+        return mav;
+    }
  
 
 // @GetMapping("updateDoctor")
