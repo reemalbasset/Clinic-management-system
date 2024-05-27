@@ -218,7 +218,7 @@ public void testUpdateProfile() {
         User dbUser = new User();
         dbUser.setUsername("testUser");
         dbUser.setPassword(org.mindrot.jbcrypt.BCrypt.hashpw("correctPassword", org.mindrot.jbcrypt.BCrypt.gensalt()));
-        dbUser.setType("admin");
+        dbUser.setRole("admin");
         when(userRepository.findByUsername("testUser")).thenReturn(dbUser);
 
         // Call the method with valid credentials
@@ -245,7 +245,7 @@ public void testUpdateProfile() {
         User dbUser = new User();
         dbUser.setUsername("testUser");
         dbUser.setPassword(org.mindrot.jbcrypt.BCrypt.hashpw("correctPassword", org.mindrot.jbcrypt.BCrypt.gensalt()));
-        dbUser.setType("user");
+        dbUser.setRole("user");
         when(userRepository.findByUsername("testUser")).thenReturn(dbUser);
 
         // Call the method with valid credentials

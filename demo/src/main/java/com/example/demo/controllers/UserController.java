@@ -93,10 +93,10 @@ public UserController(UserRepositry userRepository) {
        if (isPasswordMatched) {
          // Authentication successful: set the username attribute in the session
          session.setAttribute("username", dbUser.getUsername());
-         session.setAttribute("type", dbUser.getType());
+         session.setAttribute("type", dbUser.getRole());
          
          // Check user type
-         if ("admin".equals(dbUser.getType())) {
+         if ("admin".equals(dbUser.getRole())) {
              // If user is admin, redirect to dashboard
              return new RedirectView("/Admin/Dashboard");
          } else {
