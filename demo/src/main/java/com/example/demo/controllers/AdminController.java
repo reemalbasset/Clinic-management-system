@@ -176,6 +176,7 @@ public class AdminController {
         return mav;
     }
     
+    //a
     @PostMapping("/addDoctor")
     public ModelAndView saveDoctor(@ModelAttribute("doctor") Doctor doctor,
                                    RedirectAttributes redirectAttributes) {
