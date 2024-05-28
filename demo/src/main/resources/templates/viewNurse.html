@@ -26,7 +26,8 @@
             <td th:text="${Nurse.name}"></td>
             <td th:text="${Nurse.email}"></td>
             <td><a th:href="@{/Admin/updateNurse/{id}(id=${Nurse.id})}" class="edit-button">Edit</a></td>
-            <td><a th:href="@{/Admin/viewNurse}" class="delete-button">Delete</a></td>
+            <td> <form th:action="@{/Admin/deleteNurse(id=${Nurse.id})}" method="post" style="display:inline;">
+                <button type="submit" class="delete-button">Delete</button>
         </tr>
     </table>
 </body>

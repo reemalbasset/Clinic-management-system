@@ -289,6 +289,48 @@ public RedirectView deleteDoctor(@RequestParam Long id, RedirectAttributes redir
     // Redirect back to the view_doctors page after deletion
     return new RedirectView("/Admin/view_doctors", true);
 }
+//delete nurse
+@PostMapping("deleteNurse")
+public RedirectView deleteNurse(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+    try {
+        // Check if the doctor exists
+        Optional<Nurse> nurseOptional = nurserepository.findById(id);
+        if (nurseOptional.isPresent()) {
+            // Delete the doctor from the database
+            nurserepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "nurse deleted successfully.");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "nurse not found.");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while deleting the nurse.");
+    }
+    
+    // Redirect back to the view_doctors page after deletion
+    return new RedirectView("/Admin/viewNurse", true);
+}
+//delete patient
+@PostMapping("deletePatient")
+public RedirectView deletePatient(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+    try {
+        // Check if the doctor exists
+        Optional<Patient> patientOptional = patientRepositry.findById(id);
+        if (patientOptional.isPresent()) {
+            // Delete the doctor from the database
+            patientRepositry.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "patient deleted successfully.");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "patient not found.");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while deleting the patient.");
+    }
+    
+    // Redirect back to the view_doctors page after deletion
+    return new RedirectView("/Admin/viewPatient", true);
+}
 
 @Autowired
 private NurseRepository nurserepository;
