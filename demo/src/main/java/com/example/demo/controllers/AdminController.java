@@ -366,12 +366,38 @@ List<Patient> patients = this.patientRepositry.findAll();
 mav.addObject("patients", patients);
 return mav;
 }
+@Autowired
+private UserRepositry userRepositry;
 @GetMapping("addAdmin")
     public ModelAndView showAddAdminForm() {
         ModelAndView mav = new ModelAndView("add_admin");
         mav.addObject("user", new User());
         return mav;
     }
+    @PostMapping("addAdmin")
+    public ModelAndView saveAdmin(@ModelAttribute("user") User user,
+                                  RedirectAttributes redirectAttributes) {
+        ModelAndView mav = new ModelAndView();
+        try {
+            String encodedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12));
+            user.setPassword(encodedPassword);
+            user.setRole("ADMIN"); 
+            userRepositry.save(user);
+            redirectAttributes.addFlashAttribute("successMessage", "Administrator added successfully.");
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save administrator details due to a constraint violation.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save administrator details.");
+        }
+        mav.setViewName("redirect:/Admin/addAdmin");
+        return mav;
+    }
 
+    
 
 }
+
+
+
