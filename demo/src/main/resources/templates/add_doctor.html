@@ -14,6 +14,8 @@
         <h2>Add Doctor</h2>
         <form id="registrationForm" method="POST" action="/Admin/addDoctor" th:object="${doctor}">
             <div class="form-group">
+                <label for="username">username</label>
+                <input type="text" id="username" name="username" th:field="*{username}" required placeholder="Enter userName">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" th:field="*{name}" required placeholder="Enter Name">
                 <span id="nameErrorMessage" class="error-message"></span>
