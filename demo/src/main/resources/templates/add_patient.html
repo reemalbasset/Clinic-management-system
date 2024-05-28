@@ -13,6 +13,8 @@
         <form id="registrationForm" method="POST" action="/Admin/addPatient" th:object="${patient}">
             <input type="hidden" name="action" value="addPatient">
             <div class="form-group">
+                <label for="username">username</label>
+                <input type="text" id="username" name="username" th:field="*{username}" required placeholder="Enter userName">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" th:field="*{name}" required placeholder="Enter Name">
                 <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-message"></span>

@@ -408,4 +408,6 @@ List<Patient> patients = this.patientRepositry.findAll();
 mav.addObject("patients", patients);
 return mav;
 }
+//all users
+
 }
