@@ -10,8 +10,8 @@
     <div th:include="sidebar"></div>
     <div class="container">
         <h2>Add Admin</h2>
-        <form id="registrationForm" method="POST" action="/Admin/addPatient" th:object="${patient}">
-            <input type="hidden" name="action" value="addPatient">
+        <form id="registrationForm" method="POST" action="/Admin/addAdmin" th:object="${Admin}">
+            <input type="hidden" name="action" value="addAdmin">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" th:field="*{name}" required placeholder="Enter Name">
@@ -42,6 +42,6 @@
             </div>
         </form>
     </div>
-    <script th:src="@{../js/addPatient.js}"></script>
+    <script th:src="@{../js/addAdmin.js}"></script>
 </body>
 </html>
