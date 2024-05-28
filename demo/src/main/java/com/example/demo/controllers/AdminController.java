@@ -366,4 +366,12 @@ List<Patient> patients = this.patientRepositry.findAll();
 mav.addObject("patients", patients);
 return mav;
 }
+@GetMapping("addAdmin")
+    public ModelAndView showAddAdminForm() {
+        ModelAndView mav = new ModelAndView("add_admin");
+        mav.addObject("user", new User());
+        return mav;
+    }
+
+
 }
